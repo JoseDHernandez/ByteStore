@@ -28,7 +28,10 @@ export default function CartProduct({ product }: Props) {
           <b>{product.name}</b>
         </p>
         <div>
-          <button className="p-1 border-yellow-500 border-1 rounded-md block hover:scale-105 transition duration-300 ease-in-out">
+          <button
+            className="p-1 border-red-500 border-1 rounded-md block hover:scale-105 transition duration-300 ease-in-out"
+            onClick={() => removeFromCart(product.id)}
+          >
             <BiCartDownload size={21} />
           </button>
         </div>
@@ -60,23 +63,31 @@ export default function CartProduct({ product }: Props) {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 mt-2">
-        <button onClick={() => verifyQuantity(quantity - 1)}>
-          <BiMinus />
-        </button>
+      <div className="flex justify-center">
+        <div className="flex items-center gap-2 mt-2 mx-auto">
+          <button
+            onClick={() => verifyQuantity(quantity - 1)}
+            className="p-1 border-yellow-500 border-1 rounded-md block hover:scale-105 transition duration-300 ease-in-out"
+          >
+            <BiMinus />
+          </button>
 
-        <input
-          type="number"
-          value={quantity}
-          min={1}
-          max={product.stock}
-          onChange={(e) => verifyQuantity(Number(e.target.value))}
-          className="w-16 text-center border rounded"
-        />
+          <input
+            type="number"
+            value={quantity}
+            min={1}
+            max={product.stock}
+            onChange={(e) => verifyQuantity(Number(e.target.value))}
+            className="w-16 text-center border-gray-500 border-1 rounded-md"
+          />
 
-        <button onClick={() => verifyQuantity(quantity + 1)}>
-          <BiPlus />
-        </button>
+          <button
+            onClick={() => verifyQuantity(quantity + 1)}
+            className="p-1 border-yellow-500 border-1 rounded-md block hover:scale-105 transition duration-300 ease-in-out"
+          >
+            <BiPlus />
+          </button>
+        </div>
       </div>
     </div>
   );

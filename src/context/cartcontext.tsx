@@ -36,6 +36,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
   const addToCart = (product: Product | CartItem, quantity?: number) => {
+    if (product.stock < 1) return;
     const q = quantity != null && quantity > 1 ? quantity : 1;
     setCart((prev) => {
       //Verificar si existe

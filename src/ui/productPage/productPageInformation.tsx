@@ -62,6 +62,7 @@ export default function ProductPageInformation({ product }: Props) {
               <br />
               {!moreQuantity ? (
                 <select
+                  disabled={product.stock < 1}
                   id="units-shop"
                   className="p-2 my-2 ml-4 border-1 rounded-md w-[90%] lg:w-[60%] border-gray-400 h-10"
                   onChange={(e) => verifyQuantity(parseInt(e.target.value))}
@@ -86,20 +87,27 @@ export default function ProductPageInformation({ product }: Props) {
                   type="number"
                   min={1}
                   max={product.stock}
+                  disabled={product.stock < 1}
                 />
               )}
               <p className="ml-4 text-gray-700">
-                Unidades disponibles: {product.stock}
+                {product.stock < 1
+                  ? "Sin unidades disponibles"
+                  : `Unidades disponibles: ${product.stock}`}
               </p>
             </div>
           </div>
           <div className="mx-auto lg:mx-0 mt-4 mb-8 lg:my-4 flex flex-wrap gap-5 justify-around lg:justify-normal">
-            <button className=" border-2 border-yellow-500 bg-yellow-500 font-bold p-3 rounded-md  hover:scale-105 transition duration-300 ease-in-out">
-              Comprar
+            <button
+              disabled={product.stock < 1}
+              className="border-2 border-yellow-500 bg-yellow-500 font-bold p-3 rounded-md  hover:scale-105 transition duration-300 ease-in-out"
+            >
+              {product.stock < 1 ? "No disponible" : "Comprar"}
             </button>
             <button
               className="border-2 border-yellow-500 font-bold px-3 py-1 rounded-md hover:scale-105 transition duration-300 ease-in-out"
               onClick={() => addToCartEvent()}
+              disabled={product.stock < 1}
             >
               <BiCartAdd size={30} />
             </button>

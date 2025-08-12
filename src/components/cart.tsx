@@ -1,13 +1,11 @@
 "use client";
-import { useState } from "react";
 import { useCart } from "@/context/cartcontext";
 import Link from "next/link";
 import { BiCart } from "react-icons/bi";
 import { BiX } from "react-icons/bi";
-import { CartItem } from "@/types/cartItem";
 import CartProduct from "./cartProduct";
 export default function Cart() {
-  const { stateOffCanvas, cart, clearCart, openOffCanvas } = useCart();
+  const { stateOffCanvas, cart, openOffCanvas } = useCart();
 
   return (
     <>
@@ -19,7 +17,7 @@ export default function Cart() {
       </button>
       <div
         className={`${
-          true ? "block" : "hidden"
+          stateOffCanvas ? "block" : "hidden"
         } z-10 fixed top-0  right-0  h-full bg-white drop-shadow-2xl p-4 w-[25dvw]`}
       >
         <div className="flex justify-between">

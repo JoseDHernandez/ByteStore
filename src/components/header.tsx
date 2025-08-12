@@ -4,7 +4,7 @@ import { BiUser } from "react-icons/bi";
 import Cart from "./cart";
 export default function Header() {
   return (
-    <div>
+    <header>
       <div className="grid grid-cols-5 gap-5 py-2 px-20 ">
         <img src="https://placehold.co/60x60?text=logo" width="60" alt="logo" />
         <div className="col-span-3 h-max self-end">
@@ -27,6 +27,6 @@ export default function Header() {
           </li>
         </ul>
       </nav>
-    </div>
+    </header>
   );
 }

@@ -1,6 +1,7 @@
-import Link from "next/link";
+"use client";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 interface PaginatorProps {
-  path: string;
   currentPage: number;
   totalPages: number;
   size: number;
@@ -10,56 +11,70 @@ interface Page {
   path: string;
 }
 export default function Paginator({
-  path,
   currentPage,
   totalPages,
   size,
 }: PaginatorProps) {
-  let pages: Page[] = [];
+  const [actualPage, setActualPage] = useState(1);
+  let pages: number[] = [];
   //Corregir el numero de la pagina
-  if (currentPage < 1) currentPage = 1;
-  if (currentPage > totalPages) currentPage = totalPages;
+  useEffect(() => {
+    if (isNaN(currentPage) || currentPage < 1) {
+      setActualPage(1);
+    } else if (currentPage > totalPages) {
+      setActualPage(totalPages);
+    } else {
+      setActualPage(currentPage);
+    }
+  }, [currentPage, totalPages]);
+
   //Añadir
-  let start = currentPage === 1 ? currentPage + 1 : currentPage - 1;
+  let start = actualPage === 1 ? actualPage + 1 : actualPage - 1;
   for (let i = start; i <= totalPages && pages.length < size; i++) {
     if (i > 0) {
-      pages.push({
-        numPage: i,
-        path: `${path}?page=${i}`,
-      });
+      pages.push(i);
     }
   }
-
+  //Parametro page
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+  const setPageParam = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", page.toString());
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    setActualPage(page);
+  };
   return (
     <div className="my-8 flex gap-2 w-max mx-auto">
-      {currentPage > totalPages - size && (
-        <Link
-          href={`${path}?page=1`}
+      {actualPage > totalPages - size && (
+        <button
+          onClick={() => setPageParam(1)}
           className="inline-block  min-w-9 text-center p-2 rounded-md hover:bg-yellow-500  bg-gray-300 hover:scale-105 transition duration-300 ease-in-out"
           title="Ir a la primer página"
         >
           &larr;
-        </Link>
+        </button>
       )}
       {pages.map((page) => (
-        <Link
-          key={page.numPage}
-          href={page.path}
+        <button
+          key={page}
+          onClick={() => setPageParam(page)}
           className={`inline-block  min-w-9 text-center p-2 rounded-md hover:bg-yellow-500 hover:scale-105 transition duration-300 ease-in-out ${
-            currentPage == page.numPage ? "bg-yellow-400" : "bg-gray-300"
+            actualPage == page ? "bg-yellow-400" : "bg-gray-300"
           }`}
         >
-          {page.numPage}
-        </Link>
+          {page}
+        </button>
       ))}
-      {currentPage < totalPages - 1 && (
-        <Link
-          href={`${path}?page=${totalPages}`}
+      {actualPage < totalPages - 1 && (
+        <button
+          onClick={() => setPageParam(totalPages)}
           className="inline-block  min-w-9 text-center p-2 rounded-md hover:bg-yellow-500  bg-gray-300 hover:scale-105 transition duration-300 ease-in-out"
           title="Ir a la ultima página"
         >
           &rarr;
-        </Link>
+        </button>
       )}
     </div>
   );
