@@ -1,12 +1,11 @@
 import type { Product } from "@/types/product";
-import { numberFormat, getDiscount, wordBreaker } from "@/utils/textFormatters";
+import { numberFormat, getDiscount } from "@/utils/textFormatters";
 interface CardProductProps {
   data: Product;
   className?: string;
-  isBig?: boolean;
 }
 
-export default function CardProduct({ data, isBig }: CardProductProps) {
+export default function CardProduct({ data }: CardProductProps) {
   const newPrice = numberFormat(getDiscount(data.price, data.discount));
 
   return (

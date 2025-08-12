@@ -1,15 +1,15 @@
 export interface Processor {
   brand: string;
   family: string;
-  processor_model: string;
-  core_count: number;
-  processor_speed: string;
+  model: string;
+  cores: number;
+  speed: string;
 }
 
 export interface Display {
   size: number;
   resolution: string;
-  graphics_card: string;
+  graphics: string;
   brand?: string;
 }
 

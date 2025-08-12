@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { CartProvider } from "@/context/cartcontext";
+import Header from "@/components/header";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,12 +16,10 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={` antialiased`}>
-        <header>
-          <nav>
-            <Link href="/products">Products</Link>
-          </nav>
-        </header>
-        <main className="container mx-auto">{children}</main>
+        <CartProvider>
+          <Header />
+          <main className="container mx-auto px-8 mt-10">{children}</main>
+        </CartProvider>
       </body>
     </html>
   );

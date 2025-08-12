@@ -1,5 +1,6 @@
 import type { Product } from "@/types/product";
 import CardProduct from "@/components/cardProduct";
+import Paginator from "@/components/paginator";
 import { numberFormat, getDiscount, wordBreaker } from "@/utils/textFormatters";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -25,11 +26,41 @@ export default async function ProductsPage({
 
   return (
     <section>
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
         <aside className="p-4 bg-white shadow-xl rounded-2xl h-full">
           <h2>Filtros</h2>
+          <div>
+            <label htmlFor="sort-price">Ordenar por precio</label>
+            <select name="sort-price" id="sort-price">
+              <option value="">Selecciona</option>
+              <option value="">Menor a mayor</option>
+              <option value="">Mayor a menor</option>
+            </select>
+          </div>
+          <div>
+            <p>Marca</p>
+            <div>
+              <input type="checkbox" name="brand" id="" />
+              <label htmlFor="">Marca 1</label>
+            </div>
+            <div>
+              <input type="checkbox" name="brand" id="" />
+              <label htmlFor="">Marca 1</label>
+            </div>
+            <div>
+              <input type="checkbox" name="brand" id="" />
+              <label htmlFor="">Marca 1</label>
+            </div>
+            <div>
+              <input type="checkbox" name="brand" id="" />
+              <label htmlFor="">Marca 1</label>
+            </div>
+          </div>
+          <button className="py-2 px-4 block mx-auto font-bold bg-yellow-400 rounded-md hover:scale-105 transition duration-300 ease-in-out">
+            Filtrar
+          </button>
         </aside>
-        <div className="col-span-3 grid grid-cols-4 gap-4">
+        <div className="lg:col-span-3 grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] lg:grid-cols-4 gap-4">
           {products.map((product, index) => {
             if (index >= 0 && index <= 2) {
               return (
@@ -37,11 +68,16 @@ export default async function ProductsPage({
                   href={`/products/${product.id}`}
                   key={product.id}
                   className={
-                    index == 0 ? "col-span-2 row-span-2" : "col-span-2"
+                    index == 0 ? "lg:col-span-2 lg:row-span-2" : "lg:col-span-2"
                   }
                 >
-                  <article className="py-4 px-8 bg-white shadow-xl rounded-2xl text-center h-full relative">
-                    <p className="mt-2 text-balance text-2xl">{product.name}</p>
+                  <article className="py-4 px-8 bg-white shadow-xl rounded-2xl text-center h-full ">
+                    <div className="mt-2 flex flex-wrap justify-between ">
+                      <h2 className="text-balance text-2xl">{product.name}</h2>
+                      {product.discount > 0 && (
+                        <p className="bg-yellow-500 font-semibold  inline-block py-1 px-2 rounded-sm  opacity-75">{`- ${product.discount}%`}</p>
+                      )}
+                    </div>
                     <img
                       src={product.image}
                       width={index == 0 ? 370 : 200}
@@ -52,7 +88,7 @@ export default async function ProductsPage({
                       loading="lazy"
                     />
                     {index == 0 && product.discount > 0 && (
-                      <p className="text-left text-pretty">
+                      <p className="text-left text-pretty hidden lg:block">
                         {`${wordBreaker(product.description, 40)}...`}
                       </p>
                     )}
@@ -73,9 +109,6 @@ export default async function ProductsPage({
                         </>
                       )}
                     </p>
-                    {product.discount > 0 && (
-                      <p className="bg-yellow-500 font-semibold  inline-block py-1 px-2 rounded-sm absolute top-5 right-5 opacity-75">{`- ${product.discount}%`}</p>
-                    )}
                   </article>
                 </Link>
               );
@@ -89,7 +122,12 @@ export default async function ProductsPage({
         </div>
       </div>
       <div>
-        <Link href={`/products?page=2`}>Pagina 2</Link>
+        <Paginator
+          path="/products"
+          currentPage={numberPage}
+          totalPages={totalPages}
+          size={3}
+        />
       </div>
     </section>
   );

@@ -1,5 +1,4 @@
 @import "tailwindcss";
-
 html {
   font-size: 16px;
 }
@@ -7,4 +6,11 @@ body {
   font-family: "Inter", sans-serif;
   line-height: 1.5;
   background-color: #eeeeee;
+}
+p {
+  line-height: 1.6;
+}
+a,
+button {
+  cursor: pointer;
 }

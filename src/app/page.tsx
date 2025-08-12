@@ -15,53 +15,50 @@ export default async function Home() {
     <>
       <h1 className="text-center my-4 text-5xl">ByteShop</h1>
       <section className="grid  gap-9  grid-cols-1 md:grid-cols-2 lg:grid-rows-2 lg:grid-cols-4">
-        <article className=" p-4  bg-white shadow-xl rounded-2xl md:col-span-2 lg:row-span-2 relative">
-          <div className="flex gap-5 justify-between">
-            <p className="text-4xl text-center">
-              <strong>{products[0].name}</strong>
-            </p>
-            {products[0].discount > 0 && (
-              <span className="bg-yellow-400 font-semibold inline-block py-1 px-2 rounded-sm text-xl h-max">{`-${products[0].discount}%`}</span>
-            )}
-          </div>
-          <img
-            src={products[0].image}
-            alt={products[0].name}
-            width="400"
-            className="row-start-2 mx-auto lx:row-start-3"
-          />
-          <div>
-            <p> {`${wordBreaker(products[0].description, 17)}...`}</p>
-            <br />
-            <p>
-              {products[0].discount == 0 ? (
-                <strong className="text-xl text-center">{`${numberFormat(
-                  products[0].price
-                )}`}</strong>
-              ) : (
-                <span className="text-center block">
-                  <strong className="text-xl">
-                    {numberFormat(
-                      getDiscount(products[0].price, products[0].discount)
-                    )}
-                  </strong>{" "}
-                  <br />
-                  <s className="block my-4 lg:my-2">
-                    <small>{`${numberFormat(products[0].price)}`}</small>
-                  </s>
-                </span>
+        <Link
+          href={`/products/${products[0].id}`}
+          className="md:col-span-2 lg:row-span-2"
+        >
+          <article className=" p-8  bg-white shadow-xl rounded-2xl  relative h-full">
+            <div className="flex gap-5 justify-between">
+              <p className="text-4xl text-center">
+                <strong>{products[0].name}</strong>
+              </p>
+              {products[0].discount > 0 && (
+                <span className="bg-yellow-400 font-semibold inline-block py-1 px-2 rounded-sm text-xl h-max">{`-${products[0].discount}%`}</span>
               )}
-            </p>
-          </div>
-          <div className="my-2 text-center">
-            <Link
-              href={`/products/${products[0].id}`}
-              className="p-4 bg-amber-300 inline-block rounded-md font-bold"
-            >
-              Ver producto
-            </Link>
-          </div>
-        </article>
+            </div>
+            <img
+              src={products[0].image}
+              alt={products[0].name}
+              width="400"
+              className="row-start-2 mx-auto lx:row-start-3"
+            />
+            <div>
+              <p> {`${wordBreaker(products[0].description, 17)}...`}</p>
+              <br />
+              <p>
+                {products[0].discount == 0 ? (
+                  <strong className="text-xl text-center">{`${numberFormat(
+                    products[0].price
+                  )}`}</strong>
+                ) : (
+                  <span className="text-center block">
+                    <strong className="text-xl">
+                      {numberFormat(
+                        getDiscount(products[0].price, products[0].discount)
+                      )}
+                    </strong>{" "}
+                    <br />
+                    <s className="block my-4 lg:my-2">
+                      <small>{`${numberFormat(products[0].price)}`}</small>
+                    </s>
+                  </span>
+                )}
+              </p>
+            </div>
+          </article>
+        </Link>
         {products.slice(1, 3).map((product) => (
           <Link
             href={`/products/${product.id}`}
