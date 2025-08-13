@@ -1,4 +1,5 @@
 "use client";
+import { BiArrowFromLeft, BiArrowFromRight } from "react-icons/bi";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 interface PaginatorProps {
@@ -6,17 +7,13 @@ interface PaginatorProps {
   totalPages: number;
   size: number;
 }
-interface Page {
-  numPage: number;
-  path: string;
-}
 export default function Paginator({
   currentPage,
   totalPages,
   size,
 }: PaginatorProps) {
   const [actualPage, setActualPage] = useState(1);
-  let pages: number[] = [];
+  const pages: number[] = [];
   //Corregir el numero de la pagina
   useEffect(() => {
     if (isNaN(currentPage) || currentPage < 1) {
@@ -29,7 +26,7 @@ export default function Paginator({
   }, [currentPage, totalPages]);
 
   //Añadir
-  let start = actualPage === 1 ? actualPage + 1 : actualPage - 1;
+  const start = actualPage === 1 ? actualPage + 1 : actualPage - 1;
   for (let i = start; i <= totalPages && pages.length < size; i++) {
     if (i > 0) {
       pages.push(i);
@@ -47,33 +44,36 @@ export default function Paginator({
   };
   return (
     <div className="my-8 flex gap-2 w-max mx-auto">
-      {actualPage > totalPages - size && (
+      {actualPage > 1 && (
         <button
           onClick={() => setPageParam(1)}
-          className="inline-block  min-w-9 text-center p-2 rounded-md hover:bg-yellow-500  bg-gray-300 hover:scale-105 transition duration-300 ease-in-out"
+          className="inline-block border-2 font-bold  min-w-9 text-center p-1 rounded-md hover:bg-yellow-500   hover:scale-105 transition duration-300 ease-in-out"
           title="Ir a la primer página"
+          aria-label="Ir a la primer página"
         >
-          &larr;
+          <BiArrowFromRight size={25} />
         </button>
       )}
       {pages.map((page) => (
         <button
           key={page}
           onClick={() => setPageParam(page)}
-          className={`inline-block  min-w-9 text-center p-2 rounded-md hover:bg-yellow-500 hover:scale-105 transition duration-300 ease-in-out ${
-            actualPage == page ? "bg-yellow-400" : "bg-gray-300"
+          className={`inline-block border-2 font-bold  min-w-9 text-center p-2 rounded-md hover:bg-yellow-500 hover:scale-105 transition duration-300 ease-in-out ${
+            actualPage == page && "bg-gray-300"
           }`}
+          aria-label={`Ir a la página número: ${page}`}
         >
           {page}
         </button>
       ))}
-      {actualPage < totalPages - 1 && (
+      {size !== totalPages && actualPage < totalPages - 1 && (
         <button
           onClick={() => setPageParam(totalPages)}
-          className="inline-block  min-w-9 text-center p-2 rounded-md hover:bg-yellow-500  bg-gray-300 hover:scale-105 transition duration-300 ease-in-out"
+          className="inline-block border-2 font-bold  min-w-9 text-center p-1 rounded-md hover:bg-yellow-500   hover:scale-105 transition duration-300 ease-in-out"
           title="Ir a la ultima página"
+          aria-label="Ir a la ultima página"
         >
-          &rarr;
+          <BiArrowFromLeft size={25} />
         </button>
       )}
     </div>

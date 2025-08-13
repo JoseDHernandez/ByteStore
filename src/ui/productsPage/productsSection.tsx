@@ -1,5 +1,5 @@
 import type { Product } from "@/types/product";
-import CardProduct from "@/components/cardProduct";
+import ProductCard from "@/components/productCard";
 import { numberFormat, getDiscount, wordBreaker } from "@/utils/textFormatters";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -72,7 +72,7 @@ export default async function ProductsSection({ numberPage }: Props) {
         }
         return (
           <Link href={`/products/${product.id}`} key={product.id}>
-            <CardProduct data={product} />
+            <ProductCard data={product} />
           </Link>
         );
       })}

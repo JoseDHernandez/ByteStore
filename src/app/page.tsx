@@ -5,7 +5,7 @@ import {
   numberFormat,
   getDiscount,
 } from "../utils/textFormatters";
-import CardProduct from "@/components/cardProduct";
+import CardProduct from "@/components/productCard";
 export default async function Home() {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/products?_limit=15`

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CartProvider } from "@/context/cartcontext";
+import { SessionProvider } from "next-auth/react";
 import Header from "@/components/header";
 import "./globals.css";
 
@@ -16,10 +17,12 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={` antialiased`}>
-        <CartProvider>
-          <Header />
-          <main className="container mx-auto px-8 mt-10">{children}</main>
-        </CartProvider>
+        <SessionProvider>
+          <CartProvider>
+            <Header />
+            <main className="container mx-auto px-8 mt-10">{children}</main>
+          </CartProvider>
+        </SessionProvider>
       </body>
     </html>
   );

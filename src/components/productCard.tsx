@@ -1,11 +1,11 @@
 import type { Product } from "@/types/product";
 import { numberFormat, getDiscount } from "@/utils/textFormatters";
-interface CardProductProps {
+interface ProductCardProps {
   data: Product;
   className?: string;
 }
 
-export default function CardProduct({ data }: CardProductProps) {
+export default function ProductCard({ data }: ProductCardProps) {
   const newPrice = numberFormat(getDiscount(data.price, data.discount));
 
   return (

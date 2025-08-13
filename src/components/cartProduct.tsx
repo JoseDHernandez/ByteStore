@@ -23,7 +23,7 @@ export default function CartProduct({ product }: Props) {
 
   return (
     <div className="rounded-lg border border-gray-300 p-2">
-      <div className="flex gap-2">
+      <div className="flex gap-2 justify-between">
         <p className=" break-words">
           <b>{product.name}</b>
         </p>

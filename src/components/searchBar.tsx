@@ -2,23 +2,28 @@
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { BiSearchAlt } from "react-icons/bi";
+import { useState } from "react";
 export default function SearchBar() {
+  const [query, setQuery] = useState("");
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
   const router = useRouter();
   const handleSearch = useDebouncedCallback((e: string) => {
+    //Validar
+    setQuery(e);
+  }, 500);
+  const search = () => {
     const params = new URLSearchParams(searchParams);
-
-    if (e) {
-      params.set("query", e);
+    if (query) {
+      params.set("query", query);
     } else {
       params.delete("query");
     }
-    if (pathname.includes("/products"))
-      return router.push(`/products?query=${e}`);
+    if (!pathname.includes("/products"))
+      return router.push(`/products?query=${query}`);
     else replace(`${pathname}?${params.toString()}`);
-  }, 500);
+  };
   return (
     <div className="flex gap-2">
       <input
@@ -31,7 +36,10 @@ export default function SearchBar() {
         className=" border-2 rounded-md h-[37px] w-full px-2"
         onChange={(e) => handleSearch(e.target.value.trim())}
       />
-      <button className="h-[37px] border-2 rounded-md p-1">
+      <button
+        className="h-[37px] border-2 rounded-md p-1"
+        onClick={() => search()}
+      >
         <BiSearchAlt size={25} />
       </button>
     </div>
