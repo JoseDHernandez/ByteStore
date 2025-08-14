@@ -46,9 +46,14 @@ export default function Header() {
             <Link href="/products">Productos</Link>
           </li>
           {!isLoggedIn && (
-            <li>
-              <Link href="/login">Ingreso</Link>
-            </li>
+            <>
+              <li>
+                <Link href="/login">Ingreso</Link>
+              </li>
+              <li>
+                <Link href="/register">Registro</Link>
+              </li>
+            </>
           )}
           {isAdmin && (
             <li>

@@ -6,11 +6,25 @@ import {
   getDiscount,
 } from "../utils/textFormatters";
 import CardProduct from "@/components/productCard";
+import { notFound } from "next/navigation";
 export default async function Home() {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/products?_limit=15`
-  );
-  const products: Product[] = await res.json();
+  let products: Product[] = [];
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/products?_limit=13`
+    );
+    if (!res.ok) notFound();
+    products = await res.json();
+  } catch (error) {
+    return notFound();
+  }
+  if (products.length === 0)
+    return (
+      <>
+        <h1 className="text-center my-4 text-5xl">ByteShop</h1>
+        <p>Conexión perdida.</p>
+      </>
+    );
   return (
     <>
       <h1 className="text-center my-4 text-5xl">ByteShop</h1>
@@ -89,7 +103,7 @@ export default async function Home() {
       </section>
       <section>
         <h2 className="my-8 text-4xl ml-8">Other products</h2>
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))]  xl:grid-cols-6 gap-9">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))]  gap-5">
           {products.slice(3).map((product) => (
             <Link key={product.id} href={`/products/${product.id}`}>
               <CardProduct data={product} />

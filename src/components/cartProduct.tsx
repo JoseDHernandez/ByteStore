@@ -1,5 +1,5 @@
 "use client";
-import { CartItem } from "@/types/cartItem";
+import type { CartItem } from "@/types/cart";
 import { numberFormat, getDiscount } from "@/utils/textFormatters";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import { BiCartDownload } from "react-icons/bi";
@@ -9,7 +9,6 @@ import { useState } from "react";
 interface Props {
   product: CartItem;
 }
-
 export default function CartProduct({ product }: Props) {
   const { addToCart, removeFromCart } = useCart();
   const [quantity, setQuantity] = useState(product.quantity);
@@ -38,7 +37,13 @@ export default function CartProduct({ product }: Props) {
       </div>
 
       <div className="flex gap-2">
-        <img src={product.image} alt={product.name} width={90} loading="lazy" />
+        <img
+          src={product.image}
+          alt={product.name}
+          width={90}
+          loading="lazy"
+          decoding="async"
+        />
         <div>
           <p>
             <span>

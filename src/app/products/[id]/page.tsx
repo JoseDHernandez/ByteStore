@@ -1,6 +1,6 @@
 import { Product } from "@/types/product";
 import { notFound } from "next/navigation";
-import ProductPageInformation from "@/ui/productPage/productPageInformation";
+import ProductPageInformation from "@/app/products/[id]/productPageInformation";
 export default async function ProductPage({
   params,
 }: {

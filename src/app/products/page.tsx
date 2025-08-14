@@ -1,6 +1,6 @@
 import Paginator from "@/components/paginator";
 import { notFound } from "next/navigation";
-import ProductsSection from "@/ui/productsPage/productsSection";
+import ProductsSection from "@/app/products/productsSection";
 import { Suspense } from "react";
 
 export default async function ProductsPage({

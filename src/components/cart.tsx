@@ -4,14 +4,16 @@ import Link from "next/link";
 import { BiCart } from "react-icons/bi";
 import { BiX } from "react-icons/bi";
 import CartProduct from "./cartProduct";
+import { usePathname } from "next/navigation";
 export default function Cart() {
   const { stateOffCanvas, cart, openOffCanvas } = useCart();
-
+  const pathname = usePathname();
   return (
     <>
       <button
         className="border-2 rounded-md p-1"
         onClick={() => openOffCanvas(true)}
+        disabled={pathname.includes("/mycart")}
       >
         <BiCart size={25} />
       </button>
@@ -43,6 +45,7 @@ export default function Cart() {
           )}
         </div>
         <Link
+          onClick={() => openOffCanvas(false)}
           href="/mycart"
           className="p-2 text-center font-bold bg-yellow-500 rounded-md  w-[80%] my-4 mx-auto block hover:scale-105 transition duration-300 ease-in-out"
         >

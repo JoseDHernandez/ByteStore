@@ -1,5 +1,5 @@
 "use client";
-import { CartItem } from "@/types/cartItem";
+import { CartItem } from "@/types/cart";
 import { Product } from "@/types/product";
 import {
   createContext,
@@ -8,7 +8,7 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-
+import { useSession } from "next-auth/react";
 interface CartContextType {
   cart: CartItem[];
   addToCart: (product: Product | CartItem, quantity?: number) => void;
@@ -16,10 +16,12 @@ interface CartContextType {
   openOffCanvas: (state: boolean) => void;
   clearCart: () => void;
   stateOffCanvas: boolean;
+  syncCart: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider = ({ children }: { children: ReactNode }) => {
+  const { data: session } = useSession();
   //Para los datos
   const [cart, setCart] = useState<CartItem[]>([]);
   //Canvas
@@ -48,10 +50,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             : i
         );
       }
-      const { id, discount, price, name, image, stock } = product;
+      const { id, discount, price, name, image, stock, brand, model } = product;
       return [
         ...prev,
-        { id, name, price, discount, image, stock, quantity: q },
+        { id, name, price, discount, image, stock, brand, model, quantity: q },
       ];
     });
   };
@@ -64,6 +66,42 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const openOffCanvas = (state: boolean) => {
     setStateOffCanvas(state);
   };
+  // Sincronizar cart del server
+  const syncCart = async () => {
+    const userId = session?.user.id;
+    if (!userId) return;
+
+    try {
+      //Solicitar carrito
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/carts/${userId}`
+      );
+      if (!res.ok) return;
+
+      const d = await res.json();
+      const serverCart: CartItem[] = d.products ?? [];
+
+      // Fusionar serverCart y cart local
+      const map = new Map<string, CartItem>();
+      [...serverCart, ...cart].forEach((item) => {
+        if (map.has(item.id)) {
+          const existing = map.get(item.id)!;
+          map.set(item.id, {
+            ...existing,
+            quantity: Math.max(existing.quantity, item.quantity),
+          });
+        } else {
+          map.set(item.id, { ...item });
+        }
+      });
+
+      const mergedCart = Array.from(map.values());
+      setCart(mergedCart);
+    } catch (err) {
+      console.log("Error sincronizando carrito:", err);
+    }
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -73,6 +111,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         clearCart,
         openOffCanvas,
         stateOffCanvas,
+        syncCart,
       }}
     >
       {children}

@@ -38,6 +38,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           middle_name: "David",
           last_name: "Hernández Hortúa",
           role: 1,
+          token: "",
         };
         return user;
       },
@@ -57,6 +58,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.middle_name = user.middle_name;
         token.last_name = user.last_name;
         token.role = user.role;
+        token.token = user.token;
       }
       return token;
     },
@@ -67,6 +69,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         middle_name: token.middle_name,
         last_name: token.last_name,
         role: token.role,
+        token: token.token,
       };
       return session;
     },

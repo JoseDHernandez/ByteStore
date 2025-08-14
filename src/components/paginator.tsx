@@ -32,7 +32,7 @@ export default function Paginator({
       pages.push(i);
     }
   }
-  //Parametro page
+  //Parámetro page
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
