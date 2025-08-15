@@ -9,11 +9,14 @@ export default async function ProductPage({
   const { id } = await params;
   //Obtener datos del producto
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`);
-  if (!res.ok) notFound();
+  //Obtener otros productos
+  const r = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products?_limit=5`);
+  if (!res.ok || !r.ok) notFound();
   const product: Product = await res.json();
+  const products: Product[] = await r.json();
   return (
     <main>
-      <ProductPageInformation product={product} />
+      <ProductPageInformation product={product} products={products} />
     </main>
   );
 }

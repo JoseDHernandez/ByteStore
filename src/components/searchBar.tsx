@@ -25,21 +25,18 @@ export default function SearchBar() {
     else replace(`${pathname}?${params.toString()}`);
   };
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 rounded-md h-full">
       <input
         type="text"
         name="search"
         id="search"
         minLength={3}
         maxLength={500}
-        placeholder="Buscar..."
-        className=" border-2 rounded-md h-[37px] w-full px-2"
+        placeholder="Buscar productos"
+        className="  rounded-md h-10 w-full px-2"
         onChange={(e) => handleSearch(e.target.value.trim())}
       />
-      <button
-        className="h-[37px] border-2 rounded-md p-1"
-        onClick={() => search()}
-      >
+      <button className="h-10  rounded-md p-1" onClick={() => search()}>
         <BiSearchAlt size={25} />
       </button>
     </div>

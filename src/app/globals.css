@@ -14,3 +14,12 @@ a,
 button {
   cursor: pointer;
 }
+
+@theme {
+  --color-green: oklch(0.5403 0.129 155.64);
+  --color-dark-blue: oklch(0.5088 0.0878 209.48);
+  --color-gray: oklch(0.8853 0 0);
+  --color-dark-gray: oklch(0.683 0 0);
+  --breakpoint-2xl: 90rem;
+  --breakpoint-3xl: 120rem;
+}

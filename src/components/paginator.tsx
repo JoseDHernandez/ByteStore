@@ -3,15 +3,15 @@ import { BiArrowFromLeft, BiArrowFromRight } from "react-icons/bi";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 interface PaginatorProps {
-  currentPage: number;
-  totalPages: number;
+  perPages?: number;
   size: number;
 }
-export default function Paginator({
-  currentPage,
-  totalPages,
-  size,
-}: PaginatorProps) {
+export default function Paginator({ perPages, size }: PaginatorProps) {
+  // totalPages debería ser consultado desde la base de datos indicando cuantos registros tiene en endpoint consultado
+  const items = 51;
+  const totalPages = Math.ceil(items / (perPages ?? 11));
+  const urlParams = useSearchParams();
+  const currentPage = Number(urlParams.get("page")) ?? 1;
   const [actualPage, setActualPage] = useState(1);
   const pages: number[] = [];
   //Corregir el numero de la pagina

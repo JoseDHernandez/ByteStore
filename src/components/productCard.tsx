@@ -1,5 +1,6 @@
 import type { Product } from "@/types/product";
 import { numberFormat, getDiscount } from "@/utils/textFormatters";
+import Score from "./score";
 interface ProductCardProps {
   data: Product;
   className?: string;
@@ -9,33 +10,30 @@ export default function ProductCard({ data }: ProductCardProps) {
   const newPrice = numberFormat(getDiscount(data.price, data.discount));
 
   return (
-    <article className="p-2 bg-white shadow-xl rounded-2xl text-center h-full relative">
+    <article className="py-4 px-2 bg-white drop-shadow-xl rounded-md text-center h-full">
+      <p className="text-center font-medium h-[45px]">{data.name}</p>
       <img
         src={data.image}
         width="200"
         height="200"
         alt={data.name}
-        className="h-[200px] mx-auto"
+        className="h-[200px] mx-auto object-contain"
         decoding="async"
         loading="lazy"
       />
-      <p className="h-[45px] mt-2 text-balance ">{data.name}</p>
+      <Score qualification={4.5} className="mx-auto" />
       <p className="my-4 h-10">
-        <span className="font-semibold">{newPrice}</span>
+        <b>{newPrice}</b>
         {data.discount > 0 && (
           <>
             <br />
-            <span className="text-gray-600">
-              <small>
-                <s>{numberFormat(data.price)}</s>
-              </small>
-            </span>
+            <small>
+              <s>{numberFormat(data.price)}</s>
+            </small>
+            <span className="ml-2 font-medium">{`-${data.discount}%`}</span>
           </>
         )}
       </p>
-      {data.discount > 0 && (
-        <p className="text-sm bg-yellow-500 font-semibold  inline-block py-1 px-2 rounded-sm absolute top-5 right-5 opacity-75">{`- ${data.discount}%`}</p>
-      )}
     </article>
   );
 }

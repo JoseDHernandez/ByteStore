@@ -39,15 +39,18 @@ export default function ProductsTable() {
       try {
         setLoading(true);
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/products?_page=${numberPage}&_per_page=${productsPerPage}`
+          `${process.env.NEXT_PUBLIC_API_URL}/products?_page=${numberPage}&_limit=${productsPerPage}`
         );
         if (!res.ok) {
           setError(true);
           return;
         }
         const data = await res.json();
-        setProducts(data.data);
-        setTotalPages(data.pages);
+        setProducts(data);
+        // Math.max(1, Math.min(page, Math.ceil(items / perPage)))
+        //Math.max(1, Math.min(1, Math.ceil(51 / 11)))
+        setTotalPages(Math.max(1, Math.min(1, Math.ceil(51 / 11))));
+        //Cantidad de productos products.length
         setQuantityOfProducts(data.items);
       } catch (err) {
         console.error(err);
@@ -194,7 +197,7 @@ export default function ProductsTable() {
         </Modal>
       )}
 
-      <Paginator size={3} currentPage={numberPage} totalPages={totalPages} />
+      <Paginator size={3} perPages={productsPerPage} />
     </section>
   );
 }

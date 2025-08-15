@@ -11,34 +11,46 @@ export default function Header() {
   const isLoggedIn = session?.user;
   const isAdmin = session?.user.role;
   return (
-    <header>
-      <div className="grid grid-cols-5 gap-5 py-2 px-20 ">
-        <img
-          src="https://placehold.co/60x60?text=logo"
-          width={60}
-          height={60}
-          alt="logo"
-        />
-        <div className="col-span-3 h-max self-end">
+    <header className="py-4 mx-auto w-[80dvw] md:max-w-[70dvw]">
+      <div className="grid grid-cols-5 gap-10 h-10 items-center mb-4">
+        <p className="font-bold hidden md:block text-lg xl:text-2xl">
+          Byte store
+        </p>
+        <div className="col-span-3">
           <SearchBar />
         </div>
-        <div className="self-end flex gap-5">
-          <Link href="/account" className="border-2 rounded-md p-1">
-            <BiUser size={25} />
-          </Link>
-          <Cart />
-          {isLoggedIn && (
+        <div className="flex gap-10 h-full items-center">
+          {isLoggedIn ? (
             <button
-              className="border-2 rounded-md p-1 flex items-center gap-3 font-bold"
+              className="rounded-md  flex items-center"
               onClick={() => signOut()}
             >
-              Salir <BiLogOut size={25} />
+              <BiUser size={36} className="block" />{" "}
+              <div className="h-9">
+                <div className="text-[12px] hidden 2xl:block">Salir de la</div>
+                <div className="2xl:relative 2xl:top-[-5px] font-medium hidden md:block">
+                  Cuenta
+                </div>
+              </div>
             </button>
+          ) : (
+            <Link href="/account" className="rounded-md  flex items-center">
+              <BiUser size={36} className="block" />{" "}
+              <div className="h-full">
+                <div className="text-[0.62em] hidden 2xl:block">
+                  Ingresar a la
+                </div>
+                <div className="2xl:relative 2xl:top-[-5px] font-medium hidden md:block">
+                  Cuenta
+                </div>
+              </div>
+            </Link>
           )}
+          <Cart />
         </div>
       </div>
       <nav>
-        <ul className="list-none px-20 flex gap-10 mt-2">
+        <ul className="list-none flex flex-wrap md:flex-nowrap gap-x-10 mt-4 font-bold">
           <li>
             <Link href="/">Inicio</Link>
           </li>
@@ -55,9 +67,25 @@ export default function Header() {
               </li>
             </>
           )}
+          <li>
+            <Link href="/contact">Contacto</Link>
+          </li>
+          {isLoggedIn && (
+            <>
+              <li>
+                <Link href="/orders">Ordenes</Link>
+              </li>
+              <li>
+                <Link href="/cart">Carro</Link>
+              </li>
+              <li>
+                <Link href="/account">Cuenta</Link>
+              </li>
+            </>
+          )}
           {isAdmin && (
             <li>
-              <Link href="/admin">Administrar productos</Link>
+              <Link href="/admin">Administrar</Link>
             </li>
           )}
         </ul>

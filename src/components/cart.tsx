@@ -11,31 +11,31 @@ export default function Cart() {
   return (
     <>
       <button
-        className="border-2 rounded-md p-1"
+        className="rounded-md"
         onClick={() => openOffCanvas(true)}
         disabled={pathname.includes("/mycart")}
       >
-        <BiCart size={25} />
+        <BiCart size={36} />
       </button>
       <div
         className={`${
           stateOffCanvas ? "block" : "hidden"
-        } z-10 fixed top-0  right-0  h-full bg-white drop-shadow-2xl p-4 w-[25dvw]`}
+        } z-10 fixed top-0  right-0  h-full bg-white drop-shadow-2xl p-4 w-[80dvw] sm:w-[50dvw] md:w-[35dvw] xl:w-[30dvw]`}
       >
-        <div className="flex justify-between">
-          <p className="text-2xl text-center">
-            <strong>Tu carrito</strong>
+        <div className="flex justify-between items-center">
+          <p className="text-2xl text-center p-2">
+            <strong>Tu carro de compras</strong>
           </p>
           <button
-            className="p-1 border-2 border-yellow-500 rounded-md block hover:scale-105 transition duration-300 ease-in-out"
+            className="p-1 bg-dark-blue rounded-md block hover:scale-105 transition duration-300 ease-in-out text-white"
             onClick={() => openOffCanvas(false)}
           >
-            <BiX size={25} />
+            <BiX size={30} />
           </button>
         </div>
-        <div className="h-[80dvh] my-4 py-4 px-2 overflow-y-scroll">
+        <div className="h-[75dvh] my-4 py-4 px-2 overflow-y-scroll space-y-3">
           {cart.length === 0 ? (
-            <div className="flex justify-items-center ">
+            <div className="flex justify-items-center">
               <p>No tienes productos a&ntilde;adidos al carrito de compras.</p>
             </div>
           ) : (
@@ -47,9 +47,9 @@ export default function Cart() {
         <Link
           onClick={() => openOffCanvas(false)}
           href="/mycart"
-          className="p-2 text-center font-bold bg-yellow-500 rounded-md  w-[80%] my-4 mx-auto block hover:scale-105 transition duration-300 ease-in-out"
+          className="p-2 text-center font-bold text-white bg-green rounded-md  w-[80%] mt-8 mx-auto block hover:scale-105 transition duration-300 ease-in-out"
         >
-          Ir a la p&aacute;gina del carrito
+          Ir al carrito
         </Link>
       </div>
     </>
