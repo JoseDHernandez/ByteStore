@@ -1,46 +1,45 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { loginSchema } from "./types/zodSchemas";
+import { ZodError } from "zod";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
       credentials: {
         email: {},
         password: {},
       },
       authorize: async (credentials) => {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error("Usuario y contraseña son requeridos.");
+        try {
+          const { email, password } = await loginSchema.parseAsync(credentials);
+          const params = new URLSearchParams({ email, password });
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/users?${params.toString()}`
+          );
+
+          const userData = await res.json();
+
+          if (userData && userData.length > 0) {
+            const u = userData[0];
+            const user = {
+              id: u.id,
+              first_name: u.first_name,
+              middle_name: u.middle_name,
+              last_name: u.last_name,
+              role: u.role,
+              token: "",
+            };
+            return user;
+          }
+
+          throw new Error("Credenciales invalidas");
+        } catch (error) {
+          if (error instanceof ZodError) {
+            return null;
+          }
+          return null;
         }
-        let user = null;
-        //Pendiente
-        /*
-         const res = await fetch(`${process.env.API_URL}/auth/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email: credentials?.email,
-              password: credentials?.password
-            })
-          });
-           const user = await res.json();
-        if (!user) {
-          throw new Error("Invalid credentials.")
-        }
- 
-        */
-        if (credentials.email !== "test@test.test")
-          throw new Error("Invalid credentials.");
-        user = {
-          id: "01989493-0def-7f41-ab40-20b04679fbb4",
-          first_name: "José",
-          middle_name: "David",
-          last_name: "Hernández Hortúa",
-          role: 1,
-          token: "",
-        };
-        return user;
       },
     }),
   ],

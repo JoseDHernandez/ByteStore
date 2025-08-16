@@ -44,7 +44,7 @@ export default function Paginator({ perPages, size }: PaginatorProps) {
   };
   return (
     <div className="my-8 flex gap-2 w-max mx-auto">
-      {actualPage > 1 && (
+      {actualPage > 2 && (
         <button
           onClick={() => setPageParam(1)}
           className="inline-block border-2 font-bold  min-w-9 text-center p-1 rounded-md hover:bg-yellow-500   hover:scale-105 transition duration-300 ease-in-out"

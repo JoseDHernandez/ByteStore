@@ -13,7 +13,7 @@ export default function Cart() {
       <button
         className="rounded-md"
         onClick={() => openOffCanvas(true)}
-        disabled={pathname.includes("/mycart")}
+        disabled={pathname.includes("/cart")}
       >
         <BiCart size={36} />
       </button>
@@ -46,7 +46,7 @@ export default function Cart() {
         </div>
         <Link
           onClick={() => openOffCanvas(false)}
-          href="/mycart"
+          href="/cart"
           className="p-2 text-center font-bold text-white bg-green rounded-md  w-[80%] mt-8 mx-auto block hover:scale-105 transition duration-300 ease-in-out"
         >
           Ir al carrito

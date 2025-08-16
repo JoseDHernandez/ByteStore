@@ -5,6 +5,8 @@ export const numberFormat = (num: number) => {
   return new Intl.NumberFormat("es-Co", {
     style: "currency",
     currency: "COP",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   }).format(num);
 };
 export const getDiscount = (price: number, discount: number) => {

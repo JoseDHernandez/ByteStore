@@ -1,14 +1,32 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { BiFilterAlt, BiX } from "react-icons/bi";
+
 export default function ProductsFilter() {
+  const [open, setOpen] = useState(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1280) {
+        setOpen(true);
+      } else {
+        setOpen(false);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   //Url
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+
   // 0=menor, 1=relevancia, 2=mayor
   const [sortValue, setSortValue] = useState(1);
-
   const handleChange = (e: number) => {
     setSortValue(e);
     const params = new URLSearchParams(searchParams);
@@ -22,97 +40,121 @@ export default function ProductsFilter() {
     }
     replace(`${pathname}?${params.toString()}`);
   };
-
+  //p-4 bg-white drop-shadow-2xl xl:drop-shadow-xl rounded-md h-full w-[40dvw] xl:w-[27dvw] fixed xl:static z-10 top-0 left-0 xl:z-0 xl:top-auto xl:left-auto
   return (
-    <aside className="p-4 bg-white drop-shadow-xl rounded-md h-full">
-      <h2 className="font-bold text-center text-2xl my-4">Filtros</h2>
-      <div>
-        <label htmlFor="sort-price">Ordenar por precio</label>
-        <br />
-        <div className="grid grid-cols-3 grid-rows-2 gap-2 items-center mb-4">
-          <input
-            type="range"
-            name="sort-price"
+    <div className="relative xl:static">
+      <div className="h-11 md:h-auto">
+        <button
+          onClick={() => setOpen(!open)}
+          className={`flex items-center p-2 font-bold bg-dark-blue text-white rounded-md md:absolute left-[-3em] top-4.5 ${
+            !open ? "block" : "hidden"
+          }`}
+          aria-label="Abrir panel de filtros"
+          disabled={open}
+        >
+          <BiFilterAlt size={25} />
+          <span className="ml-4 block md:hidden">Filtros</span>
+        </button>
+      </div>
+      <aside
+        className={`p-4 bg-white shadow-2xl xl:shadow-xl rounded-md h-full xl:h-max w-[60dvw]  sm:w-[50dvw] md:w-[40dvw] xl:w-[27dvw] fixed xl:static z-10 top-0 left-0 xl:z-0 xl:top-auto xl:left-auto ${
+          !open ? "hidden" : ""
+        }`}
+      >
+        <div className="flex gap-5 items-center my-4">
+          <div>
+            <button
+              onClick={() => setOpen(!open)}
+              className="p-2 font-bold bg-dark-blue text-white rounded-md xl:hidden"
+              aria-label="Abrir panel de filtros"
+            >
+              <BiX size={25} />
+            </button>
+          </div>
+          <h2 className="font-bold text-center text-2xl w-full">Filtros</h2>
+        </div>
+        <div className="overflow-y-scroll h-[70dvh] xl:h-max xl:overflow-y-auto">
+          <label htmlFor="sort-price">Ordenar por precio</label>
+          <br />
+          <select
             id="sort-price"
-            min={0}
-            max={2}
-            step={1}
-            className="w-full col-span-3"
+            className=" border border-dark-gray rounded-md p-2 my-2"
             value={sortValue}
             onChange={(e) => handleChange(Number(e.target.value))}
-          />
-          <small>Menor precio</small>
-          <small>Relevancia</small>
-          <small>Mayor precio</small>
+          >
+            <option value={0}>Menor precio</option>
+            <option value={1}>Relevancia</option>
+            <option value={2}>Mayor precio</option>
+          </select>
+          <div className="mb-4">
+            <p>Marca principal</p>
+            <div className="grid grid-cols-[24px_1fr] gap-4 mt-2">
+              <input
+                type="checkbox"
+                name="brand"
+                id="brand-1"
+                className="w-6 h-6 border-0 rounded-sm"
+              />
+              <label htmlFor="brand-1">Lenovo</label>
+
+              <input
+                type="checkbox"
+                name="brand"
+                id="brand-2"
+                className="w-6 h-6 border-0 rounded-sm"
+              />
+              <label htmlFor="brand-2">Hewlett-Packerd &#40;HP&#41;</label>
+
+              <input
+                type="checkbox"
+                name="brand"
+                id="brand-3"
+                className="w-6 h-6 border-0 rounded-sm"
+              />
+              <label htmlFor="brand-3">Asus</label>
+
+              <input
+                type="checkbox"
+                name="brand"
+                id="brand-4"
+                className="w-6 h-6 border-0 rounded-sm"
+              />
+              <label htmlFor="brand-4">Apple</label>
+            </div>
+          </div>
+          <div className="mb-4">
+            <p>Marca</p>
+            <div className="grid grid-cols-[24px_1fr] gap-4 mt-2">
+              <input
+                type="checkbox"
+                name="brand"
+                id="brand-5"
+                className="w-6 h-6 border-0 rounded-sm"
+              />
+              <label htmlFor="brand-5">Intel</label>
+
+              <input
+                type="checkbox"
+                name="brand"
+                id="brand-6"
+                className="w-6 h-6 border-0 rounded-sm"
+              />
+              <label htmlFor="brand-6">Amd</label>
+
+              <input
+                type="checkbox"
+                name="brand"
+                id="brand-7"
+                className="w-6 h-6 border-0 rounded-sm"
+              />
+              <label htmlFor="brand-7">Nvidea</label>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="mb-4">
-        <p>Marca principal</p>
-        <div className="grid grid-cols-[24px_1fr] gap-4 mt-2">
-          <input
-            type="checkbox"
-            name="brand"
-            id="brand-1"
-            className="w-6 h-6 border-0 rounded-sm"
-          />
-          <label htmlFor="brand-1">Lenovo</label>
-
-          <input
-            type="checkbox"
-            name="brand"
-            id="brand-2"
-            className="w-6 h-6 border-0 rounded-sm"
-          />
-          <label htmlFor="brand-2">Hewlett-Packerd &#40;HP&#41;</label>
-
-          <input
-            type="checkbox"
-            name="brand"
-            id="brand-3"
-            className="w-6 h-6 border-0 rounded-sm"
-          />
-          <label htmlFor="brand-3">Asus</label>
-
-          <input
-            type="checkbox"
-            name="brand"
-            id="brand-4"
-            className="w-6 h-6 border-0 rounded-sm"
-          />
-          <label htmlFor="brand-4">Apple</label>
-        </div>
-      </div>
-      <div className="mb-4">
-        <p>Marca</p>
-        <div className="grid grid-cols-[24px_1fr] gap-4 mt-2">
-          <input
-            type="checkbox"
-            name="brand"
-            id="brand-1"
-            className="w-6 h-6 border-0 rounded-sm"
-          />
-          <label htmlFor="brand-1">Intel</label>
-
-          <input
-            type="checkbox"
-            name="brand"
-            id="brand-2"
-            className="w-6 h-6 border-0 rounded-sm"
-          />
-          <label htmlFor="brand-2">Amd</label>
-
-          <input
-            type="checkbox"
-            name="brand"
-            id="brand-3"
-            className="w-6 h-6 border-0 rounded-sm"
-          />
-          <label htmlFor="brand-3">Nvidea</label>
-        </div>
-      </div>
-      <button className="py-2 px-4 block mx-auto font-bold bg-green text-white rounded-md hover:scale-105 transition duration-300 ease-in-out">
-        Filtrar
-      </button>
-    </aside>
+        <button className="my-4 w-full xl:w-max py-2 px-4 block mx-auto font-bold bg-green text-white rounded-md hover:scale-105 transition duration-300 ease-in-out">
+          Filtrar
+        </button>
+      </aside>
+    </div>
   );
 }

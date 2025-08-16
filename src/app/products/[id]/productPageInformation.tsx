@@ -9,6 +9,8 @@ import CardProduct from "@/components/productCard";
 import Score from "@/components/score";
 import { Review } from "@/types/review";
 import { useSession } from "next-auth/react";
+import { reviewSchema } from "@/types/zodSchemas";
+import PayButton from "@/components/payButton";
 interface Props {
   product: Product;
   products: Product[];
@@ -44,18 +46,18 @@ export default function ProductPageInformation({ product, products }: Props) {
       ? session?.user.first_name + " " + session?.user.last_name.split(" ")[0]
       : "Tu comentario";
     const date = new Date(Date.now()).toISOString();
+    //id local
     const id = self.crypto.randomUUID();
     const product_id = product.id;
     const review: Review = {
-      id,
       product_id,
       user_name,
       qualification,
       comment,
       date,
     };
-    setReviews([...(reviews || []), review]);
-    if (session) {
+    setReviews([...(reviews || []), { ...review, id: id }]);
+    if (session && reviewSchema.safeParse(review)) {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews`, {
           method: "POST",
@@ -171,13 +173,11 @@ export default function ProductPageInformation({ product, products }: Props) {
               >
                 <BiCartAdd size={25} /> <div>A&ntilde;adir al carro</div>
               </button>
-              <button
+              <PayButton
                 disabled={product.stock < 1}
-                className="bg-green text-white  sm:w-50 flex justify-center items-center gap-2 font-bold p-3 rounded-md  hover:scale-105 transition duration-300 ease-in-out"
-              >
-                <BiBasket size={25} />
-                {product.stock < 1 ? "No disponible" : "Comprar"}
-              </button>
+                text={product.stock < 1 ? "No disponible" : "Comprar"}
+                product={product}
+              />
             </div>
             <p className="text-pretty  px-2 lg:px-0 ">{product.description}</p>
           </div>

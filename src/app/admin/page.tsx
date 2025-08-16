@@ -4,7 +4,7 @@ import { numberFormat } from "@/utils/textFormatters";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import TableSkeleton from "@/components/skeletons/tableSkeleton";
-import { BiEditAlt, BiLink, BiEraser } from "react-icons/bi";
+import { BiEditAlt, BiLink, BiTrashAlt } from "react-icons/bi";
 import Modal from "../../components/modal";
 import Paginator from "@/components/paginator";
 import { useSearchParams } from "next/navigation";
@@ -39,7 +39,7 @@ export default function ProductsTable() {
       try {
         setLoading(true);
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/products?_page=${numberPage}&_limit=${productsPerPage}`
+          `${process.env.NEXT_PUBLIC_API_URL}/products?_page=${numberPage}&_limit=${quantityInput}`
         );
         if (!res.ok) {
           setError(true);
@@ -83,7 +83,6 @@ export default function ProductsTable() {
       setProducts((prev) => prev.filter((p) => p.id !== modalProduct.id));
     } catch (err) {
       console.error(err);
-      alert("No se pudo eliminar el producto");
     } finally {
       setModalOpen(false);
       setModalProduct(null);
@@ -96,26 +95,27 @@ export default function ProductsTable() {
   };
   return (
     <section>
-      <h2>Administración de productos</h2>
-      <div>
-        <span>
-          <label htmlFor="quantity">Cantidad de registros por página</label>
-          <input
-            type="number"
-            name="quantity"
-            id="quantity"
-            min={10}
-            defaultValue={10}
-            className="border-1"
-            onChange={(e) => setQuantityInput(parseInt(e.target.value.trim()))}
-          />
-        </span>
-        <button className="border-1" onClick={() => handleProductsPerPage()}>
+      <h2 className="font-bold text-3xl my-8">Gestor de productos</h2>
+      <div className=" flex gap-4 items-center">
+        <label htmlFor="quantity">Cantidad de registros por página</label>
+        <input
+          type="number"
+          name="quantity"
+          id="quantity"
+          min={10}
+          defaultValue={10}
+          className="border-1 border-dark-gray rounded-md p-2 w-15"
+          onChange={(e) => setQuantityInput(parseInt(e.target.value.trim()))}
+        />
+        <button
+          className="bg-green text-white font-bold p-2 rounded-md"
+          onClick={() => handleProductsPerPage()}
+        >
           Cambiar
         </button>
       </div>
       <table className="table-auto w-full border-collapse my-4">
-        <thead className="border-b-2 border-gray-300">
+        <thead className="bg-dark-blue text-white">
           <tr>
             <th colSpan={2} className="p-2 text-xl">
               Producto
@@ -138,9 +138,10 @@ export default function ProductsTable() {
                 />
               </td>
               <td className="p-2">
-                <b>{product.name}</b>
-                <br />
-                {`${product.brand} ${product.model}`}
+                <p className="flex flex-col justify-around">
+                  <b>{product.name}</b>
+                  {`${product.brand} ${product.model}`}
+                </p>
               </td>
               <td className="p-2 text-center">{product.stock}</td>
               <td className="p-2 text-center">{numberFormat(product.price)}</td>
@@ -150,22 +151,28 @@ export default function ProductsTable() {
                   : 0}
               </td>
               <td className="p-2">
-                <div className="flex justify-around ">
+                <div className="flex justify-around">
                   <button
                     onClick={() => openModal(product)}
-                    className="inline-block mx-auto p-1 border-2 rounded-md hover:bg-yellow-500 hover:scale-105 transition duration-300 ease-in-out"
+                    className="block p-1 rounded-md  hover:scale-105 transition duration-300 ease-in-out hover:bg-red-600 hover:text-white"
+                    title="Eliminar este producto"
+                    aria-label={`Eliminar ${product.name}`}
                   >
-                    <BiEraser size={30} />
+                    <BiTrashAlt size={30} />
                   </button>
                   <Link
                     href={`/products/${product.id}`}
-                    className="inline-block mx-auto p-1 border-2 rounded-md hover:bg-yellow-500 hover:scale-105 transition duration-300 ease-in-out"
+                    className="block p-1 rounded-md  hover:scale-105 transition duration-300 ease-in-out hover:text-white hover:bg-dark-blue"
+                    title="Ver página del producto"
+                    aria-label={`Ir a la página del producto ${product.name}`}
                   >
                     <BiLink size={30} />
                   </Link>
                   <Link
                     href={`/admin/product/${product.id}`}
-                    className="inline-block mx-auto p-1 border-2 rounded-md hover:bg-yellow-500 hover:scale-105 transition duration-300 ease-in-out"
+                    className="block p-1 rounded-md  hover:scale-105 transition duration-300 ease-in-out hover:text-white hover:bg-green"
+                    title="Editar producto"
+                    aria-label={`Editar ${product.name}`}
                   >
                     <BiEditAlt size={30} />
                   </Link>

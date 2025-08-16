@@ -32,11 +32,11 @@ export default function CartProduct({ product }: Props) {
           className="mx-auto object-contain"
         />
         <div className="w-full">
-          <div className="flex gap-4 justify-center lg:justify-between">
+          <div className="flex gap-4 justify-center lg:justify-between ">
             <p className="break-words">
               <b>{product.name}</b>
             </p>
-            <div>
+            <div className="w-7">
               <button
                 className="p-1 rounded-md lg:block hover:scale-105 transition duration-300 ease-in-out bg-white absolute top-2 right-2 hover:bg-dark-blue hover:text-white"
                 onClick={() => removeFromCart(product.id)}

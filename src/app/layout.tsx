@@ -29,7 +29,7 @@ export default function RootLayout({
         <SessionProvider>
           <CartProvider>
             <Header />
-            <main className="container mx-auto mt-10 max-m-[120rem] px-[5dvw] 3xl:px-4">
+            <main className="container mx-auto mt-10 max-w-[120rem] px-[5dvw]">
               {children}
             </main>
           </CartProvider>

@@ -1,5 +1,5 @@
 export interface Review {
-  id: string;
+  id?: string;
   product_id: string;
   user_name: string;
   qualification: number;

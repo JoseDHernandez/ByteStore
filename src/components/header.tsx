@@ -1,15 +1,20 @@
 "use client";
 import Link from "next/link";
-import { BiLogOut } from "react-icons/bi";
 import { useSession } from "next-auth/react";
 import SearchBar from "./searchBar";
 import { BiUser } from "react-icons/bi";
 import Cart from "./cart";
 import { signOut } from "next-auth/react";
+import { useCart } from "@/context/cartcontext";
 export default function Header() {
+  const { clearCart } = useCart();
   const { data: session } = useSession();
   const isLoggedIn = session?.user;
   const isAdmin = session?.user.role;
+  const handleSingOut = () => {
+    clearCart();
+    signOut();
+  };
   return (
     <header className="py-4 mx-auto w-[80dvw] md:max-w-[70dvw]">
       <div className="grid grid-cols-5 gap-10 h-10 items-center mb-4">
@@ -23,7 +28,7 @@ export default function Header() {
           {isLoggedIn ? (
             <button
               className="rounded-md  flex items-center"
-              onClick={() => signOut()}
+              onClick={() => handleSingOut()}
             >
               <BiUser size={36} className="block" />{" "}
               <div className="h-9">
@@ -50,7 +55,7 @@ export default function Header() {
         </div>
       </div>
       <nav>
-        <ul className="list-none flex flex-wrap md:flex-nowrap gap-x-10 mt-4 font-bold">
+        <ul className="list-none flex flex-wrap lg:flex-nowrap gap-x-10 mt-4 font-bold">
           <li>
             <Link href="/">Inicio</Link>
           </li>
@@ -67,9 +72,6 @@ export default function Header() {
               </li>
             </>
           )}
-          <li>
-            <Link href="/contact">Contacto</Link>
-          </li>
           {isLoggedIn && (
             <>
               <li>
