@@ -43,23 +43,11 @@ export const loginSchema = z.object({
 });
 //Formulario de registro
 export const registerSchema = z.object({
-  first_name: z
+  name: z
     .string()
     .trim()
-    .min(2, "Debe tener al menos 2 caracteres")
-    .max(20, "No puede exceder 20 caracteres")
-    .regex(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/, "Solo letras y espacios"),
-  middle_name: z
-    .string()
-    .trim()
-    .min(2, "Debe tener al menos 2 caracteres")
-    .max(20, "No puede exceder 20 caracteres")
-    .regex(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/, "Solo letras y espacios"),
-  last_name: z
-    .string()
-    .trim()
-    .min(2, "Debe tener al menos 2 caracteres")
-    .max(30, "No puede exceder 30 caracteres")
+    .min(6, "Debe tener al menos 6 caracteres")
+    .max(100, "No puede exceder 20 caracteres")
     .regex(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/, "Solo letras y espacios"),
   email_address: z
     .email("Email inválido")
@@ -76,6 +64,28 @@ export const registerSchema = z.object({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,20}$/,
       "Debe incluir mayúscula, minúscula, número y carácter especial"
     ),
+  physical_address: z
+    .string()
+    .trim()
+    .min(2, "La dirección es muy corta")
+    .max(100, "La dirección no debe exceder 100 caracteres")
+    .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\.\,'"#°\-]+$/, "Caracteres inválidos"),
+});
+//Formulario de actualizar cuenta
+export const updateAccountSchema = z.object({
+  id: z.string().trim().min(7).max(36),
+  name: z
+    .string()
+    .trim()
+    .min(6, "Debe tener al menos 6 caracteres")
+    .max(100, "No puede exceder 20 caracteres")
+    .regex(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/, "Solo letras y espacios"),
+  email_address: z
+    .email("Email inválido")
+    .trim()
+    .min(5, "El email debe tener al menos 5 caracteres")
+    .max(300, "El email no puede exceder 300 caracteres")
+    .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Email no válido"),
   physical_address: z
     .string()
     .trim()

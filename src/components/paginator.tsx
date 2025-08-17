@@ -1,30 +1,27 @@
 "use client";
+
+import { usePathname } from "next/navigation";
 import { BiArrowFromLeft, BiArrowFromRight } from "react-icons/bi";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 interface PaginatorProps {
   perPages?: number;
   size: number;
+  currentPage: number;
 }
-export default function Paginator({ perPages, size }: PaginatorProps) {
+export default function Paginator({
+  perPages,
+  size,
+  currentPage,
+}: PaginatorProps) {
+  const path = usePathname();
   // totalPages debería ser consultado desde la base de datos indicando cuantos registros tiene en endpoint consultado
   const items = 51;
   const totalPages = Math.ceil(items / (perPages ?? 11));
   const urlParams = useSearchParams();
-  const currentPage = Number(urlParams.get("page")) ?? 1;
-  const [actualPage, setActualPage] = useState(1);
   const pages: number[] = [];
   //Corregir el numero de la pagina
-  useEffect(() => {
-    if (isNaN(currentPage) || currentPage < 1) {
-      setActualPage(1);
-    } else if (currentPage > totalPages) {
-      setActualPage(totalPages);
-    } else {
-      setActualPage(currentPage);
-    }
-  }, [currentPage, totalPages]);
-
+  const actualPage = currentPage > totalPages ? totalPages : currentPage;
   //Añadir
   const start = actualPage === 1 ? actualPage + 1 : actualPage - 1;
   for (let i = start; i <= totalPages && pages.length < size; i++) {
@@ -33,48 +30,44 @@ export default function Paginator({ perPages, size }: PaginatorProps) {
     }
   }
   //Parámetro page
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter();
-  const setPageParam = (page: number) => {
-    const params = new URLSearchParams(searchParams.toString());
+  const buildPageUrl = (page: number) => {
+    const params = new URLSearchParams(urlParams.toString());
     params.set("page", page.toString());
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-    setActualPage(page);
+    return `${path}?${params.toString()}`;
   };
   return (
     <div className="my-8 flex gap-2 w-max mx-auto">
       {actualPage > 2 && (
-        <button
-          onClick={() => setPageParam(1)}
+        <Link
+          href={buildPageUrl(1)}
           className="inline-block border-2 font-bold  min-w-9 text-center p-1 rounded-md hover:bg-yellow-500   hover:scale-105 transition duration-300 ease-in-out"
           title="Ir a la primer página"
           aria-label="Ir a la primer página"
         >
           <BiArrowFromRight size={25} />
-        </button>
+        </Link>
       )}
       {pages.map((page) => (
-        <button
+        <Link
           key={page}
-          onClick={() => setPageParam(page)}
+          href={buildPageUrl(page)}
           className={`inline-block border-2 font-bold  min-w-9 text-center p-2 rounded-md hover:bg-yellow-500 hover:scale-105 transition duration-300 ease-in-out ${
             actualPage == page && "bg-gray-300"
           }`}
           aria-label={`Ir a la página número: ${page}`}
         >
           {page}
-        </button>
+        </Link>
       ))}
       {size !== totalPages && actualPage < totalPages - 1 && (
-        <button
-          onClick={() => setPageParam(totalPages)}
+        <Link
+          href={buildPageUrl(totalPages)}
           className="inline-block border-2 font-bold  min-w-9 text-center p-1 rounded-md hover:bg-yellow-500   hover:scale-105 transition duration-300 ease-in-out"
           title="Ir a la ultima página"
           aria-label="Ir a la ultima página"
         >
           <BiArrowFromLeft size={25} />
-        </button>
+        </Link>
       )}
     </div>
   );

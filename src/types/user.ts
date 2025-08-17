@@ -1,9 +1,13 @@
-export interface User {
+export type User = {
   id: string;
-  first_name: string;
-  middle_name: string;
-  last_name: string;
+  name: string;
+  role: number;
+  token: string;
+};
+
+export type UserRegister = {
+  id: string;
+  name: string;
   email_address: string;
   physical_address: string;
-  role: number;
-}
+};

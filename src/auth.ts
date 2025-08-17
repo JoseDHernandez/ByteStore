@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { loginSchema } from "./types/zodSchemas";
 import { ZodError } from "zod";
+import { User } from "./types/user";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -22,11 +23,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           if (userData && userData.length > 0) {
             const u = userData[0];
-            const user = {
+            const user: User = {
               id: u.id,
-              first_name: u.first_name,
-              middle_name: u.middle_name,
-              last_name: u.last_name,
+              name: u.name,
               role: u.role,
               token: "",
             };
@@ -53,9 +52,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.first_name = user.first_name;
-        token.middle_name = user.middle_name;
-        token.last_name = user.last_name;
+        token.name = user.name;
         token.role = user.role;
         token.token = user.token;
       }
@@ -64,9 +61,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, token }) {
       session.user = {
         id: token.id,
-        first_name: token.first_name,
-        middle_name: token.middle_name,
-        last_name: token.last_name,
+        name: token.name,
         role: token.role,
         token: token.token,
       };
