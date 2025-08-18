@@ -1,23 +1,17 @@
 import { auth } from "@/auth";
+import { getOrdersByUserId } from "@/services/orders";
 import { Order } from "@/types/order";
 import { numberFormat } from "@/utils/textFormatters";
 import Link from "next/link";
 import { BiRightArrowAlt, BiSad } from "react-icons/bi";
 export default async function OrdersPage() {
-  let orders: Order[] = [];
   const session = await auth();
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/orders?user_id=${session?.user.id}`
-  );
-  if (res.ok) {
-    const data = await res.json();
-    if (data.length > 0) orders = data;
-  }
+  const orders: Order[] | null = await getOrdersByUserId(session?.user.id);
 
   return (
     <section>
       <h2 className="font-bold text-3xl my-8">Ordenes</h2>
-      {orders.length > 0 ? (
+      {orders !== null && orders.length > 0 ? (
         <table className="table-auto w-full border-collapse my-4">
           <thead className="bg-dark-blue text-white">
             <tr>

@@ -1,20 +1,14 @@
-"use client";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 import SearchBar from "./searchBar";
 import { BiUser } from "react-icons/bi";
 import Cart from "./cart";
-import { signOut } from "next-auth/react";
-import { useCart } from "@/context/cartcontext";
-export default function Header() {
-  const { clearCart } = useCart();
-  const { data: session } = useSession();
+import { auth } from "@/auth";
+import SingOutButton from "./singoutButton";
+export default async function Header() {
+  const session = await auth();
   const isLoggedIn = session?.user;
   const isAdmin = session?.user.role;
-  const handleSingOut = () => {
-    clearCart();
-    signOut();
-  };
+
   return (
     <header className="py-4 mx-auto w-[80dvw] md:max-w-[70dvw]">
       <div className="grid grid-cols-5 gap-10 h-10 items-center mb-4">
@@ -26,18 +20,7 @@ export default function Header() {
         </div>
         <div className="flex gap-10 h-full items-center">
           {isLoggedIn ? (
-            <button
-              className="rounded-md  flex items-center"
-              onClick={() => handleSingOut()}
-            >
-              <BiUser size={36} className="block" />{" "}
-              <div className="h-9">
-                <div className="text-[12px] hidden 2xl:block">Salir de la</div>
-                <div className="2xl:relative 2xl:top-[-5px] font-medium hidden md:block">
-                  Cuenta
-                </div>
-              </div>
-            </button>
+            <SingOutButton />
           ) : (
             <Link href="/account" className="rounded-md  flex items-center">
               <BiUser size={36} className="block" />{" "}

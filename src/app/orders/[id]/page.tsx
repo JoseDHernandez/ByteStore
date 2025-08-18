@@ -1,8 +1,8 @@
 import { Order, ProductsOrder } from "@/types/order";
 import { notFound } from "next/navigation";
 import CartItemComponent from "@/components/cartItemComponent";
-import Link from "next/link";
 import { numberFormat } from "@/utils/textFormatters";
+import { getOrderById } from "@/services/orders";
 export default async function OrderPage({
   params,
 }: {
@@ -10,10 +10,8 @@ export default async function OrderPage({
 }) {
   const { id } = await params;
   //Obtener datos del producto
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/${id}`);
-  if (!res.ok) notFound();
-  const order: Order = await res.json();
-
+  const order: Order | null = await getOrderById(id);
+  if (order === null) notFound();
   return (
     <section>
       <h2 className="text-3xl my-8">

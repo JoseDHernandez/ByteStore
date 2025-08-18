@@ -1,4 +1,5 @@
 "use client";
+import { BiX } from "react-icons/bi";
 import React from "react";
 
 interface Props {
@@ -16,8 +17,12 @@ export default function Modal({ state, children, onClose }: Props) {
         open
         className="p-4 rounded bg-white shadow-lg w-max max-w-[50dvw] h-max max-h-[50dvh] mx-auto"
       >
-        <button className="border-2 px-2 py-1 mb-2" onClick={onClose}>
-          Cerrar
+        <button
+          className="p-2 bg-dark-blue text-white font-bold rounded-md"
+          onClick={onClose}
+          aria-label="Cerrar modal"
+        >
+          <BiX size={25} />
         </button>
         <div>{children}</div>
       </dialog>

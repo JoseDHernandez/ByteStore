@@ -1,8 +1,7 @@
 "use client";
 import { useCart } from "@/context/cartcontext";
 import Link from "next/link";
-import { BiCart } from "react-icons/bi";
-import { BiX } from "react-icons/bi";
+import { BiCart, BiX } from "react-icons/bi";
 import CartProduct from "./cartProduct";
 import { usePathname } from "next/navigation";
 export default function Cart() {

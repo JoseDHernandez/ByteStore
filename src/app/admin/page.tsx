@@ -7,7 +7,11 @@ import TableSkeleton from "@/components/skeletons/tableSkeleton";
 import { BiEditAlt, BiLink, BiTrashAlt } from "react-icons/bi";
 import Modal from "../../components/modal";
 import Paginator from "@/components/paginator";
-import { useSearchParams } from "next/navigation";
+import { notFound, useSearchParams } from "next/navigation";
+import {
+  deleteProductById,
+  getProductsPaginatedAndLimited,
+} from "@/services/products";
 export default function ProductsTable() {
   const searchParams = useSearchParams();
   const numberPage = parseInt(searchParams.get("page") ?? "1");
@@ -38,20 +42,17 @@ export default function ProductsTable() {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/products?_page=${numberPage}&_limit=${quantityInput}`
+        const data = await getProductsPaginatedAndLimited(
+          numberPage,
+          quantityInput
         );
-        if (!res.ok) {
-          setError(true);
-          return;
-        }
-        const data = await res.json();
+        if (data === null) return notFound();
         setProducts(data);
         // Math.max(1, Math.min(page, Math.ceil(items / perPage)))
         //Math.max(1, Math.min(1, Math.ceil(51 / 11)))
         setTotalPages(Math.max(1, Math.min(1, Math.ceil(51 / 11))));
         //Cantidad de productos products.length
-        setQuantityOfProducts(data.items);
+        setQuantityOfProducts(51);
       } catch (err) {
         console.error(err);
         setError(true);
@@ -71,15 +72,10 @@ export default function ProductsTable() {
   }
   //Para eliminar producto
   const handleDeleteConfirm = async () => {
-    if (!modalProduct) return;
+    if (products == null || !modalProduct) return;
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/products/${modalProduct.id}`,
-        {
-          method: "DELETE",
-        }
-      );
-      if (!res.ok) throw new Error("Error eliminando producto");
+      const res = await deleteProductById(modalProduct.id);
+      if (res !== 200) return alert("Error eliminando producto");
       setProducts((prev) => prev.filter((p) => p.id !== modalProduct.id));
     } catch (err) {
       console.error(err);
@@ -114,97 +110,109 @@ export default function ProductsTable() {
           Cambiar
         </button>
       </div>
-      <table className="table-auto w-full border-collapse my-4">
-        <thead className="bg-dark-blue text-white">
-          <tr>
-            <th colSpan={2} className="p-2 text-xl">
-              Producto
-            </th>
-            <th className="p-2 text-xl">Unidades</th>
-            <th className="p-2 text-xl">Precio</th>
-            <th className="p-2 text-xl">Descuento</th>
-            <th className="p-2 text-xl">Opciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product) => (
-            <tr key={product.id} className="border-t-1 border-gray-300">
-              <td className="p-2">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  width={70}
-                  height={70}
-                />
-              </td>
-              <td className="p-2">
-                <p className="flex flex-col justify-around">
-                  <b>{product.name}</b>
-                  {`${product.brand} ${product.model}`}
-                </p>
-              </td>
-              <td className="p-2 text-center">{product.stock}</td>
-              <td className="p-2 text-center">{numberFormat(product.price)}</td>
-              <td className="p-2 text-center">
-                {product.discount > 0
-                  ? product.discount.toString().concat(" %")
-                  : 0}
-              </td>
-              <td className="p-2">
-                <div className="flex justify-around">
-                  <button
-                    onClick={() => openModal(product)}
-                    className="block p-1 rounded-md  hover:scale-105 transition duration-300 ease-in-out hover:bg-red-600 hover:text-white"
-                    title="Eliminar este producto"
-                    aria-label={`Eliminar ${product.name}`}
-                  >
-                    <BiTrashAlt size={30} />
-                  </button>
-                  <Link
-                    href={`/products/${product.id}`}
-                    className="block p-1 rounded-md  hover:scale-105 transition duration-300 ease-in-out hover:text-white hover:bg-dark-blue"
-                    title="Ver página del producto"
-                    aria-label={`Ir a la página del producto ${product.name}`}
-                  >
-                    <BiLink size={30} />
-                  </Link>
-                  <Link
-                    href={`/admin/product/${product.id}`}
-                    className="block p-1 rounded-md  hover:scale-105 transition duration-300 ease-in-out hover:text-white hover:bg-green"
-                    title="Editar producto"
-                    aria-label={`Editar ${product.name}`}
-                  >
-                    <BiEditAlt size={30} />
-                  </Link>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {modalOpen && modalProduct && (
-        <Modal state={modalOpen} onClose={() => setModalOpen(false)}>
-          <p>
-            ¿Está seguro de eliminar el producto <b>{modalProduct.name}</b>?
-          </p>
-          <div className="flex justify-end gap-2 mt-4">
-            <button
-              className="px-4 py-2 bg-red-500 text-white rounded"
-              onClick={handleDeleteConfirm}
-            >
-              Eliminar
-            </button>
-            <button
-              className="px-4 py-2 border rounded"
-              onClick={() => setModalOpen(false)}
-            >
-              Cancelar
-            </button>
-          </div>
-        </Modal>
-      )}
+      {products.length > 0 ? (
+        <>
+          <table className="table-auto w-full border-collapse my-4">
+            <thead className="bg-dark-blue text-white">
+              <tr>
+                <th colSpan={2} className="p-2 text-xl">
+                  Producto
+                </th>
+                <th className="p-2 text-xl">Unidades</th>
+                <th className="p-2 text-xl">Precio</th>
+                <th className="p-2 text-xl">Descuento</th>
+                <th className="p-2 text-xl">Opciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {products.map((product) => (
+                <tr key={product.id} className="border-t-1 border-gray-300">
+                  <td className="p-2">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      width={70}
+                      height={70}
+                    />
+                  </td>
+                  <td className="p-2">
+                    <p className="flex flex-col justify-around">
+                      <b>{product.name}</b>
+                      {`${product.brand} ${product.model}`}
+                    </p>
+                  </td>
+                  <td className="p-2 text-center">{product.stock}</td>
+                  <td className="p-2 text-center">
+                    {numberFormat(product.price)}
+                  </td>
+                  <td className="p-2 text-center">
+                    {product.discount > 0
+                      ? product.discount.toString().concat(" %")
+                      : 0}
+                  </td>
+                  <td className="p-2">
+                    <div className="flex justify-around">
+                      <button
+                        onClick={() => openModal(product)}
+                        className="block p-1 rounded-md  hover:scale-105 transition duration-300 ease-in-out hover:bg-red-600 hover:text-white"
+                        title="Eliminar este producto"
+                        aria-label={`Eliminar ${product.name}`}
+                      >
+                        <BiTrashAlt size={30} />
+                      </button>
+                      <Link
+                        href={`/products/${product.id}`}
+                        className="block p-1 rounded-md  hover:scale-105 transition duration-300 ease-in-out hover:text-white hover:bg-dark-blue"
+                        title="Ver página del producto"
+                        aria-label={`Ir a la página del producto ${product.name}`}
+                      >
+                        <BiLink size={30} />
+                      </Link>
+                      <Link
+                        href={`/admin/product/${product.id}`}
+                        className="block p-1 rounded-md  hover:scale-105 transition duration-300 ease-in-out hover:text-white hover:bg-green"
+                        title="Editar producto"
+                        aria-label={`Editar ${product.name}`}
+                      >
+                        <BiEditAlt size={30} />
+                      </Link>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {modalOpen && modalProduct && (
+            <Modal state={modalOpen} onClose={() => setModalOpen(false)}>
+              <p>
+                ¿Está seguro de eliminar el producto <b>{modalProduct.name}</b>?
+              </p>
+              <div className="flex justify-end gap-2 mt-4">
+                <button
+                  className="px-4 py-2 bg-red-500 text-white rounded"
+                  onClick={handleDeleteConfirm}
+                >
+                  Eliminar
+                </button>
+                <button
+                  className="px-4 py-2 border rounded"
+                  onClick={() => setModalOpen(false)}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </Modal>
+          )}
 
-      <Paginator size={3} perPages={productsPerPage} />
+          <Paginator
+            size={3}
+            perPages={productsPerPage}
+            currentPage={numberPage}
+          />
+        </>
+      ) : (
+        <p>Error al cargar productos</p>
+      )}
     </section>
   );
 }

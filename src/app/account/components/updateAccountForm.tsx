@@ -36,7 +36,7 @@ export default function UpdateAccountForm({ userData }: Props) {
       )}
 
       <form action={formAction} className="space-y-4">
-        <input type="hidden" name="id" defaultValue={userData.id} />
+        <input type="hidden" name="id" defaultValue={userData.id} required />
 
         <input
           type="text"
