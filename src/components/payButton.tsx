@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import { Product } from "@/types/product";
 import { useCart } from "@/context/cartcontext";
 import { getDiscount } from "@/utils/textFormatters";
-import { ProductsOrder } from "@/types/order";
+import { Order, ProductsOrder } from "@/types/order";
 import { CartItem } from "@/types/cart";
+import { postOrder } from "@/services/orders";
 interface Props {
   text?: string;
   disabled?: boolean;
@@ -26,6 +27,7 @@ export default function PayButton({
   const { addToCart, cart, clearCart } = useCart();
   const router = useRouter();
   const isLogged = session?.user.id;
+  //Quitar stock de los datos
   function cartItems(cart: CartItem[]): ProductsOrder[] {
     return cart.map(({ stock, ...rest }) => rest);
   }
@@ -47,35 +49,27 @@ export default function PayButton({
 
   // Función genérica para crear una orden en el backend
   const createOrder = async (products: ProductsOrder[], total: number) => {
-    try {
-      const payDate = new Date().toISOString();
-      const date = new Date();
-      date.setDate(date.getDate() + 5);
-      const deliveryDate = date.toISOString();
-
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: isLogged,
-          products: products,
-          status: "En proceso",
-          total,
-          pay_date: payDate,
-          delivery_date: deliveryDate,
-        }),
-      });
-
-      if (res.ok) {
-        clearCart();
-        router.push("/orders");
-      }
-    } catch (error) {
-      console.error(error);
+    const payDate = new Date().toISOString();
+    const date = new Date();
+    date.setDate(date.getDate() + 5);
+    const deliveryDate = date.toISOString();
+    //Pendiente: cambiar logica a servidor
+    const data: Order = {
+      user_id: isLogged,
+      products: products,
+      status: "En proceso",
+      total,
+      pay_date: payDate,
+      delivery_date: deliveryDate,
+    };
+    const res = await postOrder(data);
+    if (res == 201) {
+      clearCart();
+      router.push("/orders");
     }
   };
 
-  const handlePay = async () => {
+  const handlePay = () => {
     // Caso: hay producto específico
     if (product) {
       if (!isLogged) {
@@ -86,7 +80,7 @@ export default function PayButton({
 
       // Si está logeado: comprar SOLO ese producto
       const total = getDiscount(product.price, product.discount) * quantity;
-      return await createOrder([productToProductOrder(product, 1)], total);
+      return createOrder([productToProductOrder(product, 1)], total);
     }
 
     // Caso: no hay producto (comprar carrito completo)
@@ -96,7 +90,7 @@ export default function PayButton({
       (sum, p) => sum + getDiscount(p.price, p.discount) * p.quantity,
       0
     );
-    return await createOrder(cartItems(cart), total);
+    return createOrder(cartItems(cart), total);
   };
 
   return (

@@ -20,7 +20,8 @@ export default async function ProductPage({
   const { id } = await params;
   //Obtener nombre de usuario
   const session = await auth();
-  const username = session?.user?.name.split(" ").slice(0, 2).join(" ") ?? null;
+  const username =
+    session?.user?.name?.split(" ").slice(0, 2).join(" ") ?? null;
   //Obtener datos de los productos
   const product = await getProductById(id);
   const products = await getProductsLimited(5);

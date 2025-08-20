@@ -3,7 +3,6 @@ import ProductsFilter from "./components/productsFilter";
 import type { Product } from "@/types/product";
 import ProductCard from "@/components/productCard";
 import { numberFormat, getDiscount } from "@/utils/textFormatters";
-import { notFound } from "next/navigation";
 import Link from "next/link";
 import Score from "@/components/score";
 import { getProductsBySearch } from "@/services/products";

@@ -11,7 +11,7 @@ export const updateAccount = async (
   const rawFormData: UserRegister = {
     id: (formData.get("id") as string) ?? "",
     name: (formData.get("name") as string) ?? "",
-    email_address: (formData.get("email_address") as string) ?? "",
+    email: (formData.get("email") as string) ?? "",
     physical_address: (formData.get("physical_address") as string) ?? "",
   };
 

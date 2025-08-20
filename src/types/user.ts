@@ -8,6 +8,6 @@ export type User = {
 export type UserRegister = {
   id: string;
   name: string;
-  email_address: string;
+  email: string;
   physical_address: string;
 };

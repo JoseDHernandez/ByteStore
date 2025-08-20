@@ -7,22 +7,16 @@ import {
 } from "../utils/textFormatters";
 import CardProduct from "@/components/productCard";
 import { notFound } from "next/navigation";
+import { getProductsLimited } from "@/services/products";
 export default async function Home() {
-  let products: Product[] = [];
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/products?_limit=15`
-    );
-    if (!res.ok) notFound();
-    products = await res.json();
-  } catch (error) {
-    return notFound();
-  }
-  if (products.length === 0)
+  const products: Product[] | null = await getProductsLimited(15);
+  if (products === null) notFound();
+
+  if (products.length == 0)
     return (
       <>
         <h1 className="text-center text-5xl font-bold">ByteShop</h1>
-        <p>Conexión perdida.</p>
+        <p>No hay productos disponibles.</p>
       </>
     );
   return (

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { BiFilterAlt, BiX } from "react-icons/bi";
-
+import Link from "next/link";
 export default function ProductsFilter() {
   const [open, setOpen] = useState(true);
 
@@ -43,10 +43,10 @@ export default function ProductsFilter() {
   //p-4 bg-white drop-shadow-2xl xl:drop-shadow-xl rounded-md h-full w-[40dvw] xl:w-[27dvw] fixed xl:static z-10 top-0 left-0 xl:z-0 xl:top-auto xl:left-auto
   return (
     <div className="relative xl:static">
-      <div className="h-11 md:h-auto">
+      <div className="h-11 md:h-auto md:fixed">
         <button
           onClick={() => setOpen(!open)}
-          className={`flex items-center p-2 font-bold bg-dark-blue text-white rounded-md md:absolute left-[-3em] top-4.5 ${
+          className={`flex items-center p-2 font-bold bg-dark-blue text-white rounded-md md:absolute left-[-2em] top-4.5 ${
             !open ? "block" : "hidden"
           }`}
           aria-label="Abrir panel de filtros"
@@ -151,9 +151,17 @@ export default function ProductsFilter() {
             </div>
           </div>
         </div>
-        <button className="my-4 w-full xl:w-max py-2 px-4 block mx-auto font-bold bg-green text-white rounded-md hover:scale-105 transition duration-300 ease-in-out">
-          Filtrar
-        </button>
+        <div className="flex gap-4 xl:gap-0 xl:flex-wrap xl:justify-around">
+          <Link
+            href="/products"
+            className="my-4 w-full xl:w-max py-2 px-4 block font-bold bg-dark-blue text-white rounded-md hover:scale-105 transition duration-300 ease-in-out"
+          >
+            Limpiar
+          </Link>
+          <button className="my-4 w-full xl:w-max py-2 px-4 block font-bold bg-green text-white rounded-md hover:scale-105 transition duration-300 ease-in-out">
+            Filtrar
+          </button>
+        </div>
       </aside>
     </div>
   );

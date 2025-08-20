@@ -23,3 +23,16 @@ export const getOrderById = async (id: string): Promise<Order | null> => {
     return null;
   }
 };
+//Crear orden
+export const postOrder = async (body: Order): Promise<number> => {
+  try {
+    const res = await http.post("/orders", { body });
+    return res.status;
+  } catch (error) {
+    console.error(
+      `Error al registrar la orden del usuario: ${body.user_id}`,
+      error
+    );
+    return 400;
+  }
+};

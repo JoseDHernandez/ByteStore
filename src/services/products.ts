@@ -81,10 +81,9 @@ export const getProductsBySearch = async ({
   }
 
   if (sort) {
-    const sortParam = sort == "asc" ? "asc" : "desc";
-    params["_sort"] = sortParam;
+    params["_sort"] = sort;
   }
-  if (order) params["_order"] = order;
+  if (order) params["_order"] = order == "asc" ? "asc" : "desc";
 
   try {
     const res = await http.get(`/products`, { params });

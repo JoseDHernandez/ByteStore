@@ -1,5 +1,5 @@
 "use client";
-import { CartItem } from "@/types/cart";
+import { Cart, CartItem } from "@/types/cart";
 import { Product } from "@/types/product";
 import {
   createContext,
@@ -10,6 +10,12 @@ import {
   useRef,
 } from "react";
 import { useSession } from "next-auth/react";
+import {
+  deleteCartById,
+  getCartByUserId,
+  postCart,
+  putCart,
+} from "@/services/cart";
 
 interface CartContextType {
   cart: CartItem[];
@@ -18,6 +24,7 @@ interface CartContextType {
   openOffCanvas: (state: boolean) => void;
   clearCart: () => void;
   stateOffCanvas: boolean;
+  signOutCart: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -25,6 +32,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [id, setId] = useState<string | null>(null);
   const { data: session } = useSession();
+  const isLoggedIn = session?.user?.name;
   const userId = session?.user?.id;
 
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -49,55 +57,48 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // Cargar cart desde el db
   useEffect(() => {
     const syncCart = async () => {
-      if (!userId) return;
+      if (!isLoggedIn) return;
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/carts?user_id=${userId}`
-        );
-        if (!res.ok) return;
-        const de = await res.json();
-        const d = de[0];
-        if (d?.id) {
-          setId(d.id);
-          const serverCart: CartItem[] = d?.products ?? [];
-
-          setCart((prevCart) => {
-            const map = new Map<string, CartItem>();
-            [...serverCart, ...prevCart].forEach((item) => {
-              if (map.has(item.id)) {
-                const existing = map.get(item.id)!;
-                map.set(item.id, {
-                  ...existing,
-                  quantity: Math.max(existing.quantity, item.quantity),
-                });
-              } else {
-                map.set(item.id, { ...item });
-              }
-            });
-            return Array.from(map.values());
+        const res = await getCartByUserId(userId);
+        //Validar si esta vació
+        if (res == null) return;
+        setId(res.id);
+        const serverCart: CartItem[] = res?.products ?? [];
+        setCart((prevCart) => {
+          const map = new Map<string, CartItem>();
+          [...serverCart, ...prevCart].forEach((item) => {
+            if (map.has(item.id)) {
+              const existing = map.get(item.id)!;
+              map.set(item.id, {
+                ...existing,
+                quantity: Math.max(existing.quantity, item.quantity),
+              });
+            } else {
+              map.set(item.id, { ...item });
+            }
           });
-        }
+          return Array.from(map.values());
+        });
       } catch (err) {
         console.error("Error sincronizando carrito:", err);
       }
     };
     syncCart();
-  }, [userId]);
+  }, [userId, isLoggedIn]);
 
   // Función para enviar el carrito al servidor
   const syncCartToServer = async (cartData: CartItem[]) => {
-    if (!userId) return;
+    if (!isLoggedIn) return;
     try {
+      console.log("id:", id);
       if (id) {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/carts/${id}`,
-          {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ user_id: userId, products: cartData }),
-          }
-        );
-        if (res.status === 404) {
+        const data: Cart = {
+          id: id,
+          user_id: userId,
+          products: cartData,
+        };
+        const res = await putCart(data);
+        if (res !== 200) {
           // carrito no existe, crearlo
           createCartToServer(cartData);
         }
@@ -109,26 +110,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   //Crear
   const createCartToServer = async (cartData: CartItem[]) => {
     if (cart.length < 1 && !id) return;
-    try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/carts`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_id: userId, products: cartData }),
-      });
-    } catch (err) {
-      console.warn("Error al crear carrito:", err);
-    }
+    const res = await postCart(userId, cartData);
+    if (res !== 201) console.warn("Error al crear carrito");
   };
   //Eliminar
   const deleteCartToServer = async () => {
-    if (cart.length < 1 && !id) return;
-    try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/carts/${id}`, {
-        method: "DELETE",
-      });
-    } catch (err) {
-      console.warn("Error eliminando carrito en servidor:", err);
-    }
+    if (id === null) return;
+    const res = await deleteCartById(id);
+    clearCart();
+    if (res !== 200) console.warn("Error al eliminar el carrito del servidor");
   };
   // Programar la actualización con debounce
   const scheduleUpdate = (newCart: CartItem[]) => {
@@ -184,13 +174,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const clearCart = () => {
     setCart([]);
-    deleteCartToServer();
   };
 
   const openOffCanvas = (state: boolean) => {
     setStateOffCanvas(state);
   };
-
+  //Limpiar carrito al cerrar sesión
+  const signOutCart = () => {
+    //eliminar carrito del servidor si esta vacio
+    if (cart.length == 0) deleteCartToServer();
+    else clearCart();
+    setId(null);
+  };
   return (
     <CartContext.Provider
       value={{
@@ -200,6 +195,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         clearCart,
         openOffCanvas,
         stateOffCanvas,
+        signOutCart,
       }}
     >
       {children}

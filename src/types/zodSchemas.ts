@@ -49,7 +49,7 @@ export const registerSchema = z.object({
     .min(6, "Debe tener al menos 6 caracteres")
     .max(100, "No puede exceder 20 caracteres")
     .regex(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/, "Solo letras y espacios"),
-  email_address: z
+  email: z
     .email("Email inválido")
     .trim()
     .min(5, "El email debe tener al menos 5 caracteres")
@@ -80,7 +80,7 @@ export const updateAccountSchema = z.object({
     .min(6, "Debe tener al menos 6 caracteres")
     .max(100, "No puede exceder 20 caracteres")
     .regex(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/, "Solo letras y espacios"),
-  email_address: z
+  email: z
     .email("Email inválido")
     .trim()
     .min(5, "El email debe tener al menos 5 caracteres")

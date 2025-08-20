@@ -5,7 +5,7 @@ import { useActionState } from "react";
 
 type Errors = {
   name?: string[];
-  email_address?: string[];
+  email?: string[];
   physical_address?: string[];
   id?: string[];
 };
@@ -52,14 +52,14 @@ export default function UpdateAccountForm({ userData }: Props) {
 
         <input
           type="email"
-          name="email_address"
-          defaultValue={userData.email_address ?? ""}
+          name="email"
+          defaultValue={userData.email ?? ""}
           placeholder="Correo"
           className="border-dark-gray border-1 p-2 w-full rounded"
           required
         />
-        {Array.isArray(state?.errors?.email_address) && (
-          <p aria-live="polite">{state.errors.email_address.join(", ")}</p>
+        {Array.isArray(state?.errors?.email) && (
+          <p aria-live="polite">{state.errors.email.join(", ")}</p>
         )}
 
         <input

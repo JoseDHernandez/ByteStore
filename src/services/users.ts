@@ -1,10 +1,10 @@
-import { UserRegister } from "@/types/user";
+import { UserRegister, User } from "@/types/user";
 import { http } from "./http";
 //Obtener usuario
 export const getUserById = async (id: string): Promise<UserRegister | null> => {
   try {
     const res = await http.get(`/users/${id}`);
-    return res.data.user;
+    return res.data;
   } catch (error) {
     console.error(`Error al obtener el usuario ${id}`, error);
     return null;
@@ -18,5 +18,22 @@ export const putUser = async (user: UserRegister): Promise<number> => {
   } catch (error) {
     console.error(`Error al actualizar el usuario ${user.id}`, error);
     return 400;
+  }
+};
+//Obtener usuario por correo y contraseña
+export const getUserForLogin = async (
+  email: string,
+  password: string
+): Promise<User | null> => {
+  try {
+    const params = new URLSearchParams({ email, password });
+    const res = await http.get(`/users?${params.toString()}`);
+    return { ...res.data[0], token: "" };
+  } catch (error) {
+    console.error(
+      `Error al obtener el usuario con el correo: ${email} y la contraseña: ${password}`,
+      error
+    );
+    return null;
   }
 };

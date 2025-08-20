@@ -13,7 +13,7 @@ export default function RegisterPage() {
       first_name: formData.get("first_name") as string,
       middle_name: formData.get("middle_name") as string,
       last_name: formData.get("last_name") as string,
-      email_address: formData.get("email_address") as string,
+      email: formData.get("email") as string,
       password: formData.get("password") as string,
       physical_address: formData.get("physical_address") as string,
     };
@@ -41,7 +41,7 @@ export default function RegisterPage() {
         return;
       }
 
-      const { email_address: email, password } = data;
+      const { email: email, password } = data;
 
       //Autenticar
       const loginRes = await signIn("credentials", {
@@ -69,45 +69,23 @@ export default function RegisterPage() {
         className="flex flex-col gap-4 w-[20rem] mx-auto"
       >
         <div>
-          <label htmlFor="first_name">Nombre</label>
+          <label htmlFor="name">Nombre</label>
           <input
             className="border rounded-sm border-dark-gray p-1 w-full mt-2"
             type="text"
-            name="first_name"
-            id="first_name"
+            name="name"
+            id="name"
             required
           />
         </div>
 
         <div>
-          <label htmlFor="middle_name">Segundo Nombre</label>
-          <input
-            className="border rounded-sm border-dark-gray p-1 w-full mt-2"
-            type="text"
-            name="middle_name"
-            id="middle_name"
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="last_name">Apellido</label>
-          <input
-            className="border rounded-sm border-dark-gray p-1 w-full mt-2"
-            type="text"
-            name="last_name"
-            id="last_name"
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="email_address">Correo electrónico</label>
+          <label htmlFor="email">Correo electrónico</label>
           <input
             className="border rounded-sm border-dark-gray p-1 w-full mt-2"
             type="email"
-            name="email_address"
-            id="email_address"
+            name="email"
+            id="email"
             required
           />
         </div>

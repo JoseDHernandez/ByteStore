@@ -5,7 +5,7 @@ import UpdateAccountForm from "./components/updateAccountForm";
 export default async function AccountPage() {
   //Obtener datos del usuario
   const session = await auth();
-  const userData = await getUserById(session?.user.id);
+  const userData = await getUserById(session?.user?.id);
   if (userData === null) return notFound();
   return (
     <section className="max-w-3xl mx-auto p-4">

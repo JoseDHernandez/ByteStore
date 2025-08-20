@@ -40,7 +40,7 @@ export default function Paginator({
       {actualPage > 2 && (
         <Link
           href={buildPageUrl(1)}
-          className="inline-block border-2 font-bold  min-w-9 text-center p-1 rounded-md hover:bg-yellow-500   hover:scale-105 transition duration-300 ease-in-out"
+          className="inline-block border-2 font-bold  min-w-9 text-center py-2 px-1 rounded-md hover:bg-yellow-500   hover:scale-105 transition duration-300 ease-in-out"
           title="Ir a la primer página"
           aria-label="Ir a la primer página"
         >
@@ -62,7 +62,7 @@ export default function Paginator({
       {size !== totalPages && actualPage < totalPages - 1 && (
         <Link
           href={buildPageUrl(totalPages)}
-          className="inline-block border-2 font-bold  min-w-9 text-center p-1 rounded-md hover:bg-yellow-500   hover:scale-105 transition duration-300 ease-in-out"
+          className="inline-block border-2 font-bold  min-w-9 text-center py-2 px-1 rounded-md hover:bg-yellow-500   hover:scale-105 transition duration-300 ease-in-out"
           title="Ir a la ultima página"
           aria-label="Ir a la ultima página"
         >

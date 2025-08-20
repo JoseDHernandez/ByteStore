@@ -2,7 +2,7 @@ import { CartItem } from "./cart";
 
 export type ProductsOrder = Omit<CartItem, "stock">;
 export type Order = {
-  id: string;
+  id?: string;
   user_id: string;
   products: ProductsOrder[];
   status: string;

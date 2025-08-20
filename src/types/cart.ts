@@ -6,3 +6,8 @@ export type CartItem = Pick<
 > & {
   quantity: number;
 };
+export type Cart = {
+  id: string;
+  user_id: string;
+  products: CartItem[];
+};
