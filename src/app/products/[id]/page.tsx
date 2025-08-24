@@ -11,6 +11,7 @@ import { getProductById, getProductsLimited } from "@/services/products";
 import { CartItemProvider } from "@/context/cartItemContext";
 import { ChangeQuantity } from "./components/changeQuantity";
 import { AddCartButton } from "./components/addCartButton";
+import Image from "next/image";
 export default async function ProductPage({
   params,
 }: {
@@ -41,11 +42,13 @@ export default async function ProductPage({
           <div className="text-balance text-center lg:flex lg:items-end">
             <h1 className="text-4xl font-semibold">{product.name}</h1>
           </div>
-          <img
+          <Image
             src={product.image}
             alt={product.name}
             width="500"
+            height="500"
             className="lg:order-first col-span-1 row-span-2 w-[22em]  mx-auto lg:w-full h-auto object-contain"
+            priority={true}
           />
           <CartItemProvider product={product}>
             <div className="flex flex-col gap-4">
@@ -53,9 +56,8 @@ export default async function ProductPage({
                 <div className="mx-auto lg:mx-0">
                   <Score
                     qualification={4}
-                    textNumber={true}
                     size={30}
-                    className="text-2xl"
+                    className="text-2xl text-p-yellow"
                   />
                   <p className="text-3xl font-(family-name:--font-barlow)">
                     <strong>

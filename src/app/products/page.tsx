@@ -6,6 +6,7 @@ import { numberFormat, getDiscount } from "@/utils/textFormatters";
 import Link from "next/link";
 import Score from "@/components/score";
 import { getProductsBySearch } from "@/services/products";
+import Image from "next/image";
 export default async function ProductsPage({
   searchParams,
 }: {
@@ -50,7 +51,7 @@ export default async function ProductsPage({
                     }
                   >
                     <article
-                      className={`py-4 px-2 lg:py-4 lg:px-8 bg-white shadow-xl rounded-2xl text-center h-full relative grid ${
+                      className={`py-4 px-2 lg:py-4 lg:px-8 bg-white border-1 border-gray shadow-xl rounded-2xl text-center h-full relative grid group transition duration-300 ease-in-out hover:shadow-2xl ${
                         index == 0 ? "lg:grid-cols-1" : "lg:grid-cols-2"
                       }`}
                     >
@@ -61,22 +62,29 @@ export default async function ProductsPage({
                       >
                         {product.name}
                       </h2>
-                      <img
-                        src={product.image}
-                        width={index == 0 ? 370 : 200}
-                        height={index == 0 ? 370 : 200}
-                        alt={product.name}
-                        className="mx-auto object-contain lg:row-span-2 w-[200px] lg:w-full"
-                        decoding="async"
-                        loading="lazy"
-                      />
+                      <div className="min-w-[200px] lg:w-full max-h-max lg:row-span-2 overflow-hidden">
+                        <Image
+                          src={product.image}
+                          width={index == 0 ? 350 : 200}
+                          height={index == 0 ? 350 : 200}
+                          alt={product.name}
+                          className="mx-auto object-contain  blur-[0.4px] group-hover:scale-110 group-hover:contrast-125 group-hover:blur-none"
+                          decoding="async"
+                          loading="eager"
+                          priority={true}
+                        />
+                      </div>
 
                       <div
-                        className={`flex justify-center flex-col ${
-                          index == 0 && "lg:flex-col-reverse"
+                        className={`flex justify-center  flex-col  ${
+                          index == 0 &&
+                          "lg:flex-col-reverse lg:relative top-[-1.5rem]"
                         }`}
                       >
-                        <Score qualification={4} className="mx-auto mb-4" />
+                        <Score
+                          qualification={4}
+                          className="mx-auto  text-p-yellow group-hover:text-yellow-500"
+                        />
                         <p className="h-10 flex items-center justify-center">
                           <span className="font-medium text-2xl font-(family-name:--font-barlow)">
                             {numberFormat(
@@ -86,7 +94,7 @@ export default async function ProductsPage({
                           {product.discount > 0 && (
                             <span className="hidden lg:block">
                               <span
-                                className={`bg-dark-blue text-white font-semibold  inline-block py-1 px-2 rounded-sm ml-4 ${
+                                className={`bg-p-red text-white font-semibold  inline-block py-1 px-2 rounded-sm ml-4 ${
                                   index > 0 && "lg:absolute top-4 right-4 ml-0"
                                 }`}
                               >{`-${product.discount}%`}</span>
@@ -101,11 +109,6 @@ export default async function ProductsPage({
                           >
                             <s>{numberFormat(product.price)}</s>
                           </span>
-                          {product.discount > 0 && (
-                            <span
-                              className={`ml-2 lg:hidden`}
-                            >{`-${product.discount}%`}</span>
-                          )}
                         </p>
                       </div>
                     </article>
@@ -128,7 +131,7 @@ export default async function ProductsPage({
             <br />
             <Link
               href="/products"
-              className="bg-green text-white font-bold p-2 inline-block rounded-md"
+              className="bg-green text-white font-bold p-2 inline-block rounded-md hover:bg-dark-green transition duration-300 ease-in-out"
             >
               Ver todos los productos
             </Link>

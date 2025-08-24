@@ -5,9 +5,16 @@ export type User = {
   token: string;
 };
 
-export type UserRegister = {
+export type UserUpdate = {
   id: string;
   name: string;
   email: string;
   physical_address: string;
+};
+export type UserRegister = {
+  name: string;
+  email: string;
+  physical_address: string;
+  password: string;
+  role?: number;
 };

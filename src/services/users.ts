@@ -1,4 +1,4 @@
-import { UserRegister, User } from "@/types/user";
+import { UserRegister, User, UserUpdate } from "@/types/user";
 import { http } from "./http";
 //Obtener usuario
 export const getUserById = async (id: string): Promise<UserRegister | null> => {
@@ -11,7 +11,7 @@ export const getUserById = async (id: string): Promise<UserRegister | null> => {
   }
 };
 //Actualizar usuario
-export const putUser = async (user: UserRegister): Promise<number> => {
+export const putUser = async (user: UserUpdate): Promise<number> => {
   try {
     const res = await http.put(`/users/${user.id}`, { user });
     return res.status;
@@ -35,5 +35,18 @@ export const getUserForLogin = async (
       error
     );
     return null;
+  }
+};
+//Registrar usuario
+export const postUser = async (user: UserRegister): Promise<number> => {
+  try {
+    const res = await http.post(`/users`, { ...user, role: 0 });
+    return res.status;
+  } catch (error) {
+    console.error(
+      `Error al registrar el usuario: ${user.name} - ${user.email}`,
+      error
+    );
+    return 400;
   }
 };

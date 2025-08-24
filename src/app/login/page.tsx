@@ -79,7 +79,7 @@ export default function LoginPage() {
         {error && <p className="text-red-500">{error}</p>}
 
         <input
-          className="p-2 text-white font-bold bg-green rounded-md w-[80%] mx-auto mt-8"
+          className="p-2 text-white font-bold bg-green rounded-md w-[80%] mx-auto mt-8 hover:scale-105 transition duration-300 ease-in-out hover:bg-dark-green"
           type="submit"
           value="Enviar"
         />

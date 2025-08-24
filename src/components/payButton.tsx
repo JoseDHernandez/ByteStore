@@ -97,7 +97,7 @@ export default function PayButton({
     <button
       onClick={handlePay}
       disabled={disabled}
-      className={`bg-green text-white sm:w-50 flex justify-center items-center gap-2 font-bold p-3 rounded-md hover:scale-105 transition duration-300 ease-in-out ${className}`}
+      className={`bg-green text-white sm:w-50 flex justify-center items-center gap-2 font-bold p-3 rounded-md hover:scale-105 hover:bg-dark-green transition duration-300 ease-in-out ${className}`}
     >
       <BiBasket size={25} />
       {text}

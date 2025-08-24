@@ -54,10 +54,13 @@ export default function CommentSection({
               }`}
             >
               <figcaption className="flex justify-between">
-                <p>
+                <p className="text-dark-blue">
                   <b>{review.name}</b>
                 </p>
-                <Score qualification={review.qualification} />
+                <Score
+                  qualification={review.qualification}
+                  className="text-p-yellow"
+                />
               </figcaption>
               <blockquote className="ml-4 mt-1">
                 <p>{review.comment}</p>
@@ -78,7 +81,8 @@ export default function CommentSection({
             <>
               <br />
               <small>
-                *Las calificaciones son registradas si tienes una cuenta.{" "}
+                <span className="text-p-red">*</span>Las calificaciones son
+                registradas si tienes una cuenta.{" "}
                 <Link href="login" className="underline text-green font-medium">
                   Ingresa aqu&iacute;
                 </Link>
@@ -89,7 +93,7 @@ export default function CommentSection({
         <div className="grid grid-cols-4 grid-rows-2 gap-5 p-4 pb-0">
           <div>
             <label htmlFor="qualification" className="font-medium">
-              Calificaci&oacute;n*
+              Calificaci&oacute;n<span className="text-p-red">*</span>
             </label>
             <br />
             <input
@@ -105,7 +109,7 @@ export default function CommentSection({
           </div>
           <div className="col-span-3 row-span-2">
             <label htmlFor="comment" className="font-medium">
-              Comentario*
+              Comentario<span className="text-p-red">*</span>
             </label>
             <br />
             <textarea
@@ -121,7 +125,7 @@ export default function CommentSection({
           <div>
             <button
               type="submit"
-              className="text-white bg-dark-blue px-3 py-2 flex justify-center items-center gap-4 rounded-md"
+              className="text-white bg-blue px-3 py-2 flex justify-center items-center gap-4 rounded-md hover:scale-105 transition duration-300 ease-in-out hover:bg-dark-green"
             >
               <BiCommentCheck size={25} />
               Comentar

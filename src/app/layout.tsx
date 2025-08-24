@@ -24,12 +24,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
+    <html lang="es" className="min-h-screen ">
       <body className={` antialiased ${inter.className} ${barlow.variable}`}>
         <SessionProvider>
           <CartProvider>
             <Header />
-            <main className="container mx-auto mt-10 max-w-[120rem] px-[5dvw]">
+            <main className="container mx-auto mt-10 max-w-[100rem] px-[5dvw] ">
               {children}
             </main>
           </CartProvider>

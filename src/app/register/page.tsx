@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { registerSchema } from "@/types/zodSchemas";
 import { signIn } from "next-auth/react";
+import { postUser } from "@/services/users";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -10,9 +11,7 @@ export default function RegisterPage() {
 
   const registerAction = async (formData: FormData) => {
     const d = {
-      first_name: formData.get("first_name") as string,
-      middle_name: formData.get("middle_name") as string,
-      last_name: formData.get("last_name") as string,
+      name: formData.get("name") as string,
       email: formData.get("email") as string,
       password: formData.get("password") as string,
       physical_address: formData.get("physical_address") as string,
@@ -24,24 +23,15 @@ export default function RegisterPage() {
       return;
     }
 
-    const data = {
-      ...result.data,
-      role: 0,
-    };
-
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      const res = await postUser(result.data);
 
-      if (!res.ok) {
+      if (res !== 201) {
         setError("No se pudo registrar el usuario");
         return;
       }
 
-      const { email: email, password } = data;
+      const { email: email, password } = result.data;
 
       //Autenticar
       const loginRes = await signIn("credentials", {
@@ -115,7 +105,7 @@ export default function RegisterPage() {
         {error && <p className="text-red-500">{error}</p>}
 
         <input
-          className="p-2 text-white font-bold bg-green rounded-md w-[80%] mx-auto mt-8"
+          className="p-2 text-white font-bold bg-green rounded-md w-[80%] mx-auto mt-8 hover:scale-105 transition duration-300 ease-in-out hover:bg-dark-green"
           type="submit"
           value="Registrarse"
         />

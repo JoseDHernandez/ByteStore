@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { BiArrowFromLeft, BiArrowFromRight } from "react-icons/bi";
+import { BiLastPage, BiFirstPage } from "react-icons/bi";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 interface PaginatorProps {
@@ -40,19 +40,19 @@ export default function Paginator({
       {actualPage > 2 && (
         <Link
           href={buildPageUrl(1)}
-          className="inline-block border-2 font-bold  min-w-9 text-center py-2 px-1 rounded-md hover:bg-yellow-500   hover:scale-105 transition duration-300 ease-in-out"
+          className="inline-block border-1 border-gray   min-w-9 text-center py-2 px-1 rounded-md hover:bg-green hover:text-white   hover:scale-105 transition duration-300 ease-in-out"
           title="Ir a la primer página"
           aria-label="Ir a la primer página"
         >
-          <BiArrowFromRight size={25} />
+          <BiFirstPage size={25} />
         </Link>
       )}
       {pages.map((page) => (
         <Link
           key={page}
           href={buildPageUrl(page)}
-          className={`inline-block border-2 font-bold  min-w-9 text-center p-2 rounded-md hover:bg-yellow-500 hover:scale-105 transition duration-300 ease-in-out ${
-            actualPage == page && "bg-gray-300"
+          className={`inline-block border-1 border-gray   min-w-9 text-center p-2 rounded-md hover:bg-green hover:text-white hover:scale-105 transition duration-300 ease-in-out ${
+            actualPage == page && "bg-blue text-white"
           }`}
           aria-label={`Ir a la página número: ${page}`}
         >
@@ -62,11 +62,11 @@ export default function Paginator({
       {size !== totalPages && actualPage < totalPages - 1 && (
         <Link
           href={buildPageUrl(totalPages)}
-          className="inline-block border-2 font-bold  min-w-9 text-center py-2 px-1 rounded-md hover:bg-yellow-500   hover:scale-105 transition duration-300 ease-in-out"
+          className="inline-block border-1 border-gray   min-w-9 text-center py-2 px-1 rounded-md hover:bg-green hover:text-white   hover:scale-105 transition duration-300 ease-in-out"
           title="Ir a la ultima página"
           aria-label="Ir a la ultima página"
         >
-          <BiArrowFromLeft size={25} />
+          <BiLastPage size={25} />
         </Link>
       )}
     </div>

@@ -5,7 +5,7 @@ html {
 body {
   font-family: "Inter", sans-serif;
   line-height: 1.5;
-  background-color: #eeeeee;
+  background-color: white;
 }
 p {
   line-height: 1.6;
@@ -17,9 +17,13 @@ button {
 
 @theme {
   --color-green: oklch(0.5403 0.129 155.64);
-  --color-dark-blue: oklch(0.5088 0.0878 209.48);
+  --color-dark-green: oklch(0.4564 0.1066 156.16);
+  --color-blue: oklch(0.5088 0.0878 209.48);
+  --color-dark-blue: oklch(0.3949 0.0681 209.2);
   --color-gray: oklch(0.8853 0 0);
   --color-dark-gray: oklch(0.683 0 0);
+  --color-p-yellow: oklch(0.787 0.160984 86.8304);
+  --color-p-red: oklch(0.51 0.1891 29.52);
   --breakpoint-2xl: 90rem;
   --breakpoint-3xl: 120rem;
 }

@@ -66,7 +66,7 @@ export default function MyCartPage() {
           <p>Tu carrito de compras esta vac&iacute;o</p>
           <Link
             href="/products"
-            className="bg-green p-2  font-bold rounded-md text-white"
+            className="bg-green p-2  font-bold rounded-md text-white hover:scale-105 transition duration-300 ease-in-out"
           >
             Regresar a la tienda
           </Link>

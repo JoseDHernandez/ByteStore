@@ -17,14 +17,19 @@ export default function Modal({ state, children, onClose }: Props) {
         open
         className="p-4 rounded bg-white shadow-lg w-max max-w-[50dvw] h-max max-h-[50dvh] mx-auto"
       >
-        <button
-          className="p-2 bg-dark-blue text-white font-bold rounded-md"
-          onClick={onClose}
-          aria-label="Cerrar modal"
-        >
-          <BiX size={25} />
-        </button>
-        <div>{children}</div>
+        <div>
+          <div className="flex justify-between">
+            <p className="font-bold text-2xl">Eliminar producto</p>
+            <button
+              className="p-2 bg-dark-blue text-white font-bold rounded-md"
+              onClick={onClose}
+              aria-label="Cerrar modal"
+            >
+              <BiX size={25} />
+            </button>
+          </div>
+          <div className="pt-4 px-2">{children}</div>
+        </div>
       </dialog>
     </div>
   );

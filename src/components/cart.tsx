@@ -10,7 +10,7 @@ export default function Cart() {
   return (
     <>
       <button
-        className="rounded-md"
+        className="rounded-md p-1   hover:text-dark-green transition duration-300 ease-in-out hover:scale-105"
         onClick={() => openOffCanvas(true)}
         disabled={pathname.includes("/cart")}
       >
@@ -19,14 +19,14 @@ export default function Cart() {
       <div
         className={`${
           stateOffCanvas ? "block" : "hidden"
-        } z-10 fixed top-0  right-0  h-full bg-white drop-shadow-2xl p-4 w-[80dvw] sm:w-[50dvw] md:w-[35dvw] xl:w-[30dvw]`}
+        } z-10 fixed top-0  right-0  h-full bg-white drop-shadow-2xl p-4 w-[80dvw] sm:w-[50dvw] md:w-[35dvw] xl:w-[30dvw] max-w-[25rem]`}
       >
         <div className="flex justify-between items-center">
           <p className="text-2xl text-center p-2">
             <strong>Tu carro de compras</strong>
           </p>
           <button
-            className="p-1 bg-dark-blue rounded-md block hover:scale-105 transition duration-300 ease-in-out text-white"
+            className="p-1 bg-blue rounded-md block hover:scale-105 transition duration-300 ease-in-out text-white hover:bg-dark-blue"
             onClick={() => openOffCanvas(false)}
           >
             <BiX size={30} />
@@ -46,7 +46,7 @@ export default function Cart() {
         <Link
           onClick={() => openOffCanvas(false)}
           href="/cart"
-          className="p-2 text-center font-bold text-white bg-green rounded-md  w-[80%] mt-8 mx-auto block hover:scale-105 transition duration-300 ease-in-out"
+          className="p-2 text-center font-bold text-white bg-green hover:bg-dark-green rounded-md  w-[80%] mt-8 mx-auto block hover:scale-105 transition duration-300 ease-in-out"
         >
           Ir al carrito
         </Link>

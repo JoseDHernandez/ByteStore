@@ -48,7 +48,10 @@ export const registerSchema = z.object({
     .trim()
     .min(6, "Debe tener al menos 6 caracteres")
     .max(100, "No puede exceder 20 caracteres")
-    .regex(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/, "Solo letras y espacios"),
+    .regex(
+      /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/,
+      "Solo letras y espacios para el nombre"
+    ),
   email: z
     .email("Email inválido")
     .trim()
@@ -62,14 +65,17 @@ export const registerSchema = z.object({
     .max(20, "La contraseña no debe exceder los 20 caracteres")
     .regex(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,20}$/,
-      "Debe incluir mayúscula, minúscula, número y carácter especial"
+      "La contraseña debe incluir mayúscula, minúscula, número y carácter especial"
     ),
   physical_address: z
     .string()
     .trim()
     .min(2, "La dirección es muy corta")
     .max(100, "La dirección no debe exceder 100 caracteres")
-    .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\.\,'"#°\-]+$/, "Caracteres inválidos"),
+    .regex(
+      /^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\.\,'"#°\-]+$/,
+      "Caracteres inválidos en la dirección"
+    ),
 });
 //Formulario de actualizar cuenta
 export const updateAccountSchema = z.object({

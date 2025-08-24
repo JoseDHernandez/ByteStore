@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { BiFilterAlt, BiX } from "react-icons/bi";
+import { BiFilterAlt, BiX, BiTrashAlt } from "react-icons/bi";
 import Link from "next/link";
 export default function ProductsFilter() {
   const [open, setOpen] = useState(true);
@@ -57,11 +57,11 @@ export default function ProductsFilter() {
         </button>
       </div>
       <aside
-        className={`p-4 bg-white shadow-2xl xl:shadow-xl rounded-md h-full xl:h-max w-[60dvw]  sm:w-[50dvw] md:w-[40dvw] xl:w-[27dvw] fixed xl:static z-10 top-0 left-0 xl:z-0 xl:top-auto xl:left-auto ${
+        className={`p-4 bg-white border-1 border-gray shadow-xl rounded-2xl h-full xl:h-max w-[60dvw] max-w-[20rem]  sm:w-[50dvw] md:w-[40dvw] xl:w-[27dvw] fixed xl:static z-10 top-0 left-0 xl:z-0 xl:top-auto xl:left-auto ${
           !open ? "hidden" : ""
         }`}
       >
-        <div className="flex gap-5 items-center my-4">
+        <div className="flex gap-5 items-center mb-4">
           <div>
             <button
               onClick={() => setOpen(!open)}
@@ -78,7 +78,7 @@ export default function ProductsFilter() {
           <br />
           <select
             id="sort-price"
-            className=" border border-dark-gray rounded-md p-2 my-2"
+            className=" border border-dark-gray rounded-md p-2 my-2 w-full"
             value={sortValue}
             onChange={(e) => handleChange(Number(e.target.value))}
           >
@@ -151,14 +151,15 @@ export default function ProductsFilter() {
             </div>
           </div>
         </div>
-        <div className="flex gap-4 xl:gap-0 xl:flex-wrap xl:justify-around">
+        <div className="flex gap-4  xl:flex-wrap ">
           <Link
+            aria-label="Eliminar filtros"
             href="/products"
-            className="my-4 w-full xl:w-max py-2 px-4 block font-bold bg-dark-blue text-white rounded-md hover:scale-105 transition duration-300 ease-in-out"
+            className="my-4 w-full xl:w-max py-2 px-4 block font-bold bg-blue text-white rounded-md hover:bg-dark-blue hover:scale-105 transition duration-300 ease-in-out"
           >
-            Limpiar
+            <BiTrashAlt size={25} />
           </Link>
-          <button className="my-4 w-full xl:w-max py-2 px-4 block font-bold bg-green text-white rounded-md hover:scale-105 transition duration-300 ease-in-out">
+          <button className="my-4 w-full xl:w-max py-2 px-4 block font-bold bg-green text-white rounded-md hover:bg-dark-green transition duration-300 ease-in-out">
             Filtrar
           </button>
         </div>
