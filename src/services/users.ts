@@ -1,7 +1,7 @@
 import { UserRegister, User, UserUpdate } from "@/types/user";
 import { http } from "./http";
 //Obtener usuario
-export const getUserById = async (id: string): Promise<UserRegister | null> => {
+export const getUserById = async (id: string): Promise<UserUpdate | null> => {
   try {
     const res = await http.get(`/users/${id}`);
     return res.data;

@@ -1,5 +1,5 @@
 "use client";
-import { UserRegister } from "@/types/user";
+import { UserUpdate } from "@/types/user";
 import { updateAccount } from "@/actions/updateAccount";
 import { useActionState } from "react";
 
@@ -16,7 +16,7 @@ const initialState: { errors: Errors; success?: undefined } = {
 };
 
 interface Props {
-  userData: UserRegister;
+  userData: UserUpdate;
 }
 
 export default function UpdateAccountForm({ userData }: Props) {

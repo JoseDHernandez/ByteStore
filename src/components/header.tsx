@@ -2,38 +2,43 @@
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import SearchBar from "./searchBar";
-import { BiUser } from "react-icons/bi";
+import { BiLogOut, BiLogIn } from "react-icons/bi";
 import Cart from "./cart";
 import { signOut } from "next-auth/react";
 import { useCart } from "@/context/cartcontext";
 export default function Header() {
-  const { signOutCart } = useCart();
+  //Validar session
   const { data: session } = useSession();
   const isLoggedIn = session?.user;
   const isAdmin = session?.user.role;
+  //Cerrar session y limpiar carrito al salir
+  const { signOutCart } = useCart();
   const handleSingOut = () => {
     signOutCart();
     signOut();
   };
   return (
-    <header className="py-4 mx-auto w-[80dvw] md:max-w-[70dvw]">
-      <div className="grid grid-cols-5 gap-10 h-10 items-center mb-4">
+    <header className="py-4 mx-auto w-[80dvw] 2xl:max-w-[70dvw]">
+      <div className="grid grid-cols-3 md:grid-cols-5 gap-4 xl:gap-10 h-10 items-center mb-4">
         <p className="font-bold hidden md:block text-lg xl:text-2xl text-green">
           Byte store
         </p>
-        <div className="col-span-3">
+        <div className="col-span-2 md:col-span-3">
           <SearchBar />
         </div>
-        <div className="flex gap-10 h-full items-center">
+        <div className="flex gap-4 h-full items-center justify-end lg:justify-normal">
           {isLoggedIn ? (
             <button
               className="rounded-md  flex items-center py-1 px-2 group transition duration-300 ease-in-out hover:scale-105"
               onClick={() => handleSingOut()}
             >
-              <BiUser size={36} className="block group-hover:text-dark-blue" />{" "}
-              <div className="h-9 w-19 ml-1">
-                <div className="text-[12px] hidden 2xl:block">Salir de la</div>
-                <div className="2xl:relative 2xl:top-[-5px] font-medium hidden md:block">
+              <BiLogOut
+                size={36}
+                className="block group-hover:text-dark-blue"
+              />{" "}
+              <div className="h-9 lg:w-19 ml-1">
+                <div className="text-[12px] hidden lg:block">Salir de la</div>
+                <div className="lg:relative lg:top-[-5px] font-medium hidden lg:block">
                   Cuenta
                 </div>
               </div>
@@ -43,12 +48,15 @@ export default function Header() {
               href="/account"
               className="rounded-md  flex items-center py-1 px-2 group transition duration-300 ease-in-out hover:scale-105"
             >
-              <BiUser size={36} className="block group-hover:text-dark-green" />{" "}
-              <div className="h-9 w-19 ml-1 ">
+              <BiLogIn
+                size={36}
+                className="block group-hover:text-dark-green"
+              />{" "}
+              <div className="h-9 lg:w-19 ml-1 ">
                 <div className="text-[12px] hidden 2xl:block">
                   Ingresar a la
                 </div>
-                <div className="2xl:relative 2xl:top-[-5px] font-medium hidden md:block">
+                <div className="lg:relative lg:top-[-5px] font-medium hidden lg:block">
                   Cuenta
                 </div>
               </div>
@@ -58,7 +66,7 @@ export default function Header() {
         </div>
       </div>
       <nav>
-        <ul className="list-none flex flex-wrap lg:flex-nowrap gap-x-10 mt-4 font-bold">
+        <ul className="list-none flex flex-wrap lg:flex-nowrap gap-x-10 gap-y-2 mt-4 font-bold justify-center sm:justify-normal">
           <li className="transition duration-300 ease-in-out hover:text-green">
             <Link href="/">Inicio</Link>
           </li>

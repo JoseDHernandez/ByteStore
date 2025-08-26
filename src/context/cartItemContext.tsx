@@ -1,3 +1,4 @@
+// Contexto para comunicar  los componentes del products/[id]/components
 "use client";
 import { createContext, useContext, useState, ReactNode } from "react";
 import { Product } from "@/types/product";

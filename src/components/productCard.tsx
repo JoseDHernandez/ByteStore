@@ -1,6 +1,7 @@
 import type { Product } from "@/types/product";
 import { numberFormat, getDiscount } from "@/utils/textFormatters";
 import Score from "./score";
+import Image from "next/image";
 interface ProductCardProps {
   data: Product;
   className?: string;
@@ -11,11 +12,11 @@ export default function ProductCard({ data }: ProductCardProps) {
 
   return (
     <article className="py-4 px-2 bg-white border-1 border-gray shadow-xl rounded-md text-center h-full group transition duration-300 ease-in-out hover:shadow-2xl">
-      <p className="text-center font-medium h-[45px] group-hover:font-semibold">
+      <p className="text-center font-medium h-[45px] group-hover:font-semibold uppercase">
         {data.name}
       </p>
       <div className="h-[200px] overflow-hidden">
-        <img
+        <Image
           src={data.image}
           width="200"
           height="200"

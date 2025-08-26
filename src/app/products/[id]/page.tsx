@@ -12,6 +12,21 @@ import { CartItemProvider } from "@/context/cartItemContext";
 import { ChangeQuantity } from "./components/changeQuantity";
 import { AddCartButton } from "./components/addCartButton";
 import Image from "next/image";
+//Metadata
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const product = await getProductById(id);
+  return {
+    title: product
+      ? `${product.name} (${product.brand}: ${product.model}) - Byte Store`
+      : "Producto no encontrado",
+    description: product?.description ?? "Detalles del producto",
+  };
+}
 export default async function ProductPage({
   params,
 }: {
@@ -29,7 +44,7 @@ export default async function ProductPage({
   if (product === null || products === null) notFound();
   //Obtener calificaciones
   const reviews = await getReviewsByProductId(product.id);
-
+  //Calcular capacidad
   const capacity =
     product.disk_capacity > 999
       ? `${product.disk_capacity / 100} TB`
@@ -92,7 +107,7 @@ export default async function ProductPage({
           </CartItemProvider>
         </div>
         <div className="space-y-5">
-          <h2 className="text-3xl font-bold mt-3 mb-6">
+          <h2 className="text-3xl font-bold mt-3 mb-6 text-dark-green">
             Caracter&iacute;sticas
           </h2>
           <div className="grid lg:grid-cols-2 gap-x-5">
@@ -109,7 +124,7 @@ export default async function ProductPage({
               <span className="block col-span-2">{product.model}</span>
             </p>
           </div>
-          <h3 className="text-2xl font-bold ">
+          <h3 className="text-2xl font-bold text-dark-blue">
             Almacenamiento y procesamiento
           </h3>
           <div className="grid lg:grid-cols-2 gap-x-5">
@@ -166,7 +181,7 @@ export default async function ProductPage({
               <span className="block col-span-2">{`${product.ram_memory} GB`}</span>
             </p>
           </div>
-          <h3 className="text-2xl font-bold">Pantalla</h3>
+          <h3 className="text-2xl font-bold text-dark-blue">Pantalla</h3>
           <div className="grid lg:grid-cols-2 gap-x-5">
             <p className="grid grid-cols-3 border-t-1 border-b-1 p-2 border-dark-gray">
               <span className="block">
@@ -203,6 +218,7 @@ export default async function ProductPage({
           </div>
         </div>
       </section>
+      <hr className="border-gray my-8" />
       <section>
         <h2 className="font-bold text-3xl mt-8">Otros productos</h2>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))]  gap-5 my-5">

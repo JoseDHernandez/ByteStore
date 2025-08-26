@@ -26,6 +26,7 @@ export default function CommentSection({
     const date = new Date(Date.now()).toISOString();
     //id local
     const id = self.crypto.randomUUID();
+    //datos
     const review: Review = {
       product_id,
       name: user_name,
@@ -33,6 +34,7 @@ export default function CommentSection({
       comment,
       date,
     };
+    //Mostrar reseña en el cliente
     setReviews([...(reviews || []), { ...review, id: id }]);
 
     if (session && reviewSchema.safeParse(review)) {

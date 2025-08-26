@@ -7,6 +7,11 @@ import Link from "next/link";
 import Score from "@/components/score";
 import { getProductsBySearch } from "@/services/products";
 import Image from "next/image";
+//Metadata
+export const metadata = {
+  title: "Productos - Byte Store",
+  description: "Explora nuestros productos tecnológicos",
+};
 export default async function ProductsPage({
   searchParams,
 }: {
@@ -17,6 +22,7 @@ export default async function ProductsPage({
     query?: string;
   }>;
 }) {
+  //Obtener parámetros de búsqueda
   const { page, sort, order, query } = (await searchParams) ?? {};
   const numberPage = page ? parseInt(page) : 1;
   //consulta
@@ -26,6 +32,7 @@ export default async function ProductsPage({
     sort,
     order,
   });
+  //En caso de error
   if (products === null)
     return (
       <section>
@@ -56,7 +63,7 @@ export default async function ProductsPage({
                       }`}
                     >
                       <h2
-                        className={`text-balance font-bold self-center ${
+                        className={`text-balance uppercase self-center ${
                           index == 0 ? "lg:text-3xl " : "lg:text-2xl "
                         }`}
                       >
@@ -124,6 +131,7 @@ export default async function ProductsPage({
           </div>
         ) : (
           <div>
+            {/* En caso de no haber resultados según la búsqueda  */}
             <p>
               No se encontraron productos para los términos:{" "}
               <b>{query?.split(" ").join(", ")}</b>

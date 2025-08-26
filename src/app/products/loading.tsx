@@ -5,7 +5,7 @@ export default function Loading() {
         {/* Skeleton del filtro lateral */}
         <div className="animate-pulse">
           <div className="w-15 h-10 bg-gray-300 rounded-md md:hidden"></div>
-          <div className="p-4 bg-white border-1 border-gray shadow-xl rounded-2xl h-max  max-w-[20rem]  w-[27dvw] ">
+          <div className="p-4 bg-white border-1 border-gray shadow-xl rounded-2xl h-max  max-w-[20rem]  w-[27dvw] hidden md:block">
             <div className="flex gap-5 items-center mb-4">
               <div className="w-10 h-10 bg-gray-200 "></div>
               <div className="bg-gray-200 h-10 w-full"></div>

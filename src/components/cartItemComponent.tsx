@@ -5,6 +5,7 @@ import { BiMinus, BiPlus, BiTrashAlt } from "react-icons/bi";
 import { useCart } from "@/context/cartcontext";
 import { useState } from "react";
 import { ProductsOrder } from "@/types/order";
+import Image from "next/image";
 interface Props {
   product: CartItem | ProductsOrder;
   className?: string;
@@ -29,7 +30,7 @@ export default function CartItemComponent({ product, className }: Props) {
       <div className="w-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-5 items-center w-full">
           <div className="grid grid-cols-1 grid-rows-[96px_1fr] lg:grid-rows-1 lg:grid-cols-[96px_1fr] gap-5 h-full row-span-2 lg:row-span-1">
-            <img
+            <Image
               src={product.image}
               alt={product.name}
               width={96}
