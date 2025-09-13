@@ -18,3 +18,8 @@ export type UserRegister = {
   password: string;
   role?: number;
 };
+//Actualizar contraseña
+export type UserChangePassword = {
+  id: string;
+  password: string;
+};

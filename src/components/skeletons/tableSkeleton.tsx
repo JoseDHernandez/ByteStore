@@ -17,10 +17,8 @@ export default function TableSkeleton({ columns, rows, size }: Props) {
         {Array.from({ length: rows }).map((_, r) => (
           <tr key={r}>
             {Array.from({ length: columns }).map((_, c) => (
-              <td key={c} className="p-1">
-                <div
-                  className={`h-[${size}px] bg-gray-200 rounded animate-pulse `}
-                >
+              <td key={c} className="p-1" height={size}>
+                <div className={`h-full bg-gray-200 rounded animate-pulse `}>
                   &nbsp;
                 </div>
               </td>

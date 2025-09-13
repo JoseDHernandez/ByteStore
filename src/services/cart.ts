@@ -1,3 +1,4 @@
+"use server";
 import { Cart, CartItem } from "@/types/cart";
 import { http } from "./http";
 //Obtener carrito por usuario

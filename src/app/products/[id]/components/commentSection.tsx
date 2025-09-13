@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import { Review } from "@/types/review";
-import { reviewSchema } from "@/types/zodSchemas";
+import { reviewSchema } from "@/schemas/reviewsSchemas";
 import { BiCommentCheck } from "react-icons/bi";
-import Score from "../../../../components/score";
+import Score from "@/components/score";
 import Link from "next/link";
 import { postReview } from "@/services/reviews";
 interface Props {

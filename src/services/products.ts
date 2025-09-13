@@ -1,9 +1,18 @@
-import { Product } from "@/types/product";
-import { http } from "./http";
+"use server";
+import {
+  Product,
+  ProductBrands,
+  ProductData,
+  ProductDisplays,
+  ProductFilters,
+  ProductOS,
+  ProductProcessors,
+} from "@/types/product";
+import { api } from "./http";
 //Obtener producto por id
 export const getProductById = async (id: string): Promise<Product | null> => {
   try {
-    const res = await http.get<Product>(`/products/${id}`);
+    const res = await api.get<Product>(`/products/${id}`);
     return res.data;
   } catch (error) {
     console.error(`Error obteniendo el producto ${id}:`, error);
@@ -15,8 +24,8 @@ export const getProductsLimited = async (
   limit: number
 ): Promise<Product[] | null> => {
   try {
-    const res = await http.get(`/products?_limit=${limit}`);
-    return res.data;
+    const res = await api.get(`/products?limit=${limit}`);
+    return res.data.data;
   } catch (error) {
     console.error(`Error al obtener ${limit} productos.`, error);
     return null;
@@ -26,9 +35,9 @@ export const getProductsLimited = async (
 export const getProductsPaginatedAndLimited = async (
   page: number,
   limit: number
-): Promise<Product[] | null> => {
+): Promise<ProductData | null> => {
   try {
-    const res = await http.get(`/products?_page=${page}&_limit=${limit}`);
+    const res = await api.get(`/products?page=${page}&limit=${limit}`);
     return res.data;
   } catch (error) {
     console.error(
@@ -41,7 +50,7 @@ export const getProductsPaginatedAndLimited = async (
 //eliminar producto
 export const deleteProductById = async (id: string): Promise<number> => {
   try {
-    const res = await http.delete(`/products/${id}`);
+    const res = await api.delete(`/products/${id}`);
     return res.status;
   } catch (error) {
     console.error(`Error al eliminar el producto ${id}`, error);
@@ -54,42 +63,91 @@ interface GetProductsBySearchParams {
   numberPage?: number;
   sort?: string;
   order?: string;
+  limit?: number;
 }
 export const getProductsBySearch = async ({
   query,
   numberPage,
   sort,
   order,
-}: GetProductsBySearchParams): Promise<Product[] | null> => {
+  limit,
+}: GetProductsBySearchParams): Promise<ProductData | null> => {
   const params: Record<string, string | number> = {};
 
   if (query) {
-    //Formatear para varios términos
-    let q = "^";
-    if (query && query.split(" ").length > 1) {
-      query.split(" ").forEach((e) => {
-        q += `(?=.*${e})`;
-      });
-    }
-    const nameLike = query.split(" ").length > 1 ? q : query;
-    params["name_like"] = nameLike;
+    params["search"] = query;
   }
-
   if (numberPage) {
-    params["_page"] = numberPage;
-    params["_limit"] = 11;
+    params["page"] = numberPage;
   }
-
+  if (limit) {
+    params["limit"] = limit >= 10 && limit <= 100 ? limit : 10;
+  } else {
+    params["limit"] = 11;
+  }
   if (sort) {
-    params["_sort"] = sort;
+    params["sort"] = "order_" + sort;
   }
-  if (order) params["_order"] = order == "asc" ? "asc" : "desc";
-
+  if (order) params["order"] = order == "asc" ? "asc" : "desc";
   try {
-    const res = await http.get(`/products`, { params });
+    const res = await api.get(`/products`, { params });
     return res.data;
   } catch (error) {
     console.error("Error al obtener productos por consulta", error);
+    return null;
+  }
+};
+//obtener filtros
+export const getProductFilters = async (): Promise<ProductFilters | null> => {
+  try {
+    const res = await api.get("/products/filters");
+    return res.data;
+  } catch (error) {
+    console.error("Error al obtener los filtros de productos", error);
+    return null;
+  }
+};
+//obtener marcas
+export const getProductBrands = async (): Promise<ProductBrands[] | null> => {
+  try {
+    const res = await api.get("/products/brands/");
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+//obtener pantallas
+export const getProductDisplays = async (): Promise<
+  ProductDisplays[] | null
+> => {
+  try {
+    const res = await api.get("/products/displays/");
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+//obtener procesadores
+export const getProductProcessors = async (): Promise<
+  ProductProcessors[] | null
+> => {
+  try {
+    const res = await api.get("/products/processors/");
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+//sistemas operativos
+export const getProductOS = async (): Promise<ProductOS[] | null> => {
+  try {
+    const res = await api.get("/products/operating-systems/");
+    return res.data;
+  } catch (error) {
+    console.error(error);
     return null;
   }
 };

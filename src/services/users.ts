@@ -1,10 +1,16 @@
-import { UserRegister, User, UserUpdate } from "@/types/user";
-import { http } from "./http";
+"use server";
+import {
+  UserRegister,
+  User,
+  UserUpdate,
+  UserChangePassword,
+} from "@/types/user";
+import { api } from "./http";
 //Obtener usuario
 export const getUserById = async (id: string): Promise<UserUpdate | null> => {
   try {
-    const res = await http.get(`/users/${id}`);
-    return res.data;
+    const res = await api.get(`/users/${id}`);
+    return res.data.data;
   } catch (error) {
     console.error(`Error al obtener el usuario ${id}`, error);
     return null;
@@ -13,7 +19,7 @@ export const getUserById = async (id: string): Promise<UserUpdate | null> => {
 //Actualizar usuario
 export const putUser = async (user: UserUpdate): Promise<number> => {
   try {
-    const res = await http.put(`/users/${user.id}`, { user });
+    const res = await api.put(`/users/${user.id}`, { user });
     return res.status;
   } catch (error) {
     console.error(`Error al actualizar el usuario ${user.id}`, error);
@@ -26,9 +32,8 @@ export const getUserForLogin = async (
   password: string
 ): Promise<User | null> => {
   try {
-    const params = new URLSearchParams({ email, password });
-    const res = await http.get(`/users?${params.toString()}`);
-    return { ...res.data[0], token: "" };
+    const res = await api.post(`/users/sign-in`, { password, email });
+    return res.data.data;
   } catch (error) {
     console.error(
       `Error al obtener el usuario con el correo: ${email} y la contraseña: ${password}`,
@@ -40,13 +45,27 @@ export const getUserForLogin = async (
 //Registrar usuario
 export const postUser = async (user: UserRegister): Promise<number> => {
   try {
-    const res = await http.post(`/users`, { ...user, role: 0 });
+    const res = await api.post(`/users/sign-up`, { ...user, role: 0 });
     return res.status;
   } catch (error) {
     console.error(
       `Error al registrar el usuario: ${user.name} - ${user.email}`,
       error
     );
+    return 400;
+  }
+};
+//cambiar contraseña
+export const patchPassword = async (
+  user: UserChangePassword
+): Promise<number> => {
+  try {
+    const res = await api.patch(`/users/${user.id}/password`, {
+      password: user.password,
+    });
+    return res.status;
+  } catch (error) {
+    console.error(`Error al cambiar contraseña`, error);
     return 400;
   }
 };

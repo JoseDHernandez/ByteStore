@@ -1,27 +1,4 @@
 import { z } from "zod";
-//Barra de búsqueda
-export const searchSchema = z
-  .string()
-  .trim()
-  .min(3)
-  .max(30)
-  .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s]+$/);
-//Formulario de comentario
-export const reviewSchema = z.object({
-  product_id: z.uuidv7(),
-  user_name: z
-    .string()
-    .min(5)
-    .max(50)
-    .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s]+$/),
-  qualification: z.number().max(5),
-  comment: z
-    .string()
-    .min(10)
-    .max(1000)
-    .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\.\,\'\"\(\)]+$/),
-  date: z.date(),
-});
 //Formulario de ingreso
 export const loginSchema = z.object({
   email: z
@@ -79,7 +56,7 @@ export const registerSchema = z.object({
 });
 //Formulario de actualizar cuenta
 export const updateAccountSchema = z.object({
-  id: z.string().trim().min(7).max(36),
+  id: z.uuidv7(),
   name: z
     .string()
     .trim()
@@ -99,3 +76,30 @@ export const updateAccountSchema = z.object({
     .max(100, "La dirección no debe exceder 100 caracteres")
     .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\.\,'"#°\-]+$/, "Caracteres inválidos"),
 });
+//Actualizar contraseña
+export const updatePasswordSchema = z
+  .object({
+    id: z.uuidv7(),
+    password: z
+      .string()
+      .trim()
+      .min(8, "La contraseña debe tener al menos 8 caracteres")
+      .max(20, "La contraseña no debe exceder los 20 caracteres")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,20}$/,
+        "La contraseña debe incluir mayúscula, minúscula, número y carácter especial"
+      ),
+    confirmPassword: z
+      .string()
+      .trim()
+      .min(8, "La contraseña debe tener al menos 8 caracteres")
+      .max(20, "La contraseña no debe exceder los 20 caracteres")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,20}$/,
+        "La contraseña debe incluir mayúscula, minúscula, número y carácter especial"
+      ),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Las contraseñas no coinciden",
+  });

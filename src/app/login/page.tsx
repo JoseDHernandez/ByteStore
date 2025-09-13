@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
-import { loginSchema } from "@/types/zodSchemas";
+import { loginSchema } from "@/schemas/usersSchemas";
 export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);

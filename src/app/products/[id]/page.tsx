@@ -12,6 +12,7 @@ import { CartItemProvider } from "@/context/cartItemContext";
 import { ChangeQuantity } from "./components/changeQuantity";
 import { AddCartButton } from "./components/addCartButton";
 import Image from "next/image";
+import { getProductIdFromURL, productURL } from "@/utils/productURLFormatters";
 //Metadata
 export async function generateMetadata({
   params,
@@ -19,7 +20,7 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const product = await getProductById(id);
+  const product = await getProductById(getProductIdFromURL(id));
   return {
     title: product
       ? `${product.name} (${product.brand}: ${product.model}) - Byte Store`
@@ -39,7 +40,7 @@ export default async function ProductPage({
   const username =
     session?.user?.name?.split(" ").slice(0, 2).join(" ") ?? null;
   //Obtener datos de los productos
-  const product = await getProductById(id);
+  const product = await getProductById(getProductIdFromURL(id));
   const products = await getProductsLimited(5);
   if (product === null || products === null) notFound();
   //Obtener calificaciones
@@ -49,7 +50,6 @@ export default async function ProductPage({
     product.disk_capacity > 999
       ? `${product.disk_capacity / 100} TB`
       : `${product.disk_capacity} GB`;
-
   return (
     <main>
       <section>
@@ -178,7 +178,7 @@ export default async function ProductPage({
               <span className="block">
                 <b>Cantidad de memoria RAM</b>
               </span>
-              <span className="block col-span-2">{`${product.ram_memory} GB`}</span>
+              <span className="block col-span-2">{`${product.ram_capacity} GB`}</span>
             </p>
           </div>
           <h3 className="text-2xl font-bold text-dark-blue">Pantalla</h3>
@@ -223,7 +223,10 @@ export default async function ProductPage({
         <h2 className="font-bold text-3xl mt-8">Otros productos</h2>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))]  gap-5 my-5">
           {products.map((product) => (
-            <Link key={product.id} href={`/products/${product.id}`}>
+            <Link
+              key={product.id}
+              href={`/products/${productURL(product.id, product.name)}`}
+            >
               <CardProduct data={product} />
             </Link>
           ))}

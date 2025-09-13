@@ -24,7 +24,7 @@ export default auth((req) => {
     if (!isLoggedIn) {
       return NextResponse.redirect(new URL("/login", nextUrl.origin));
     }
-    if (userRole !== 1) {
+    if (userRole !== "ADMINISTRADOR") {
       return NextResponse.redirect(new URL("/", nextUrl.origin));
     }
     return NextResponse.next();

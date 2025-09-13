@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { loginSchema } from "./types/zodSchemas";
+import { loginSchema } from "@/schemas/usersSchemas";
 import { ZodError } from "zod";
 import { getUserForLogin } from "./services/users";
 

@@ -1,19 +1,25 @@
-export interface Processor {
+//tipo de procesador
+export type Processor = {
   brand: string;
   family: string;
   model: string;
   cores: number;
   speed: string;
-}
-
-export interface Display {
+};
+//tipo de display
+export type Display = {
   size: number;
   resolution: string;
   graphics: string;
-  brand?: string;
-}
-
-export interface Product {
+  brand: string;
+};
+//sistema
+export type OperatingSystem = {
+  system: string;
+  distribution: string;
+};
+//Producto
+export type Product = {
   id: string;
   name: string;
   description: string;
@@ -24,8 +30,44 @@ export interface Product {
   brand: string;
   model: string;
   processor: Processor;
-  operating_system: string[];
-  ram_memory: number;
+  system: OperatingSystem;
+  ram_capacity: number;
   disk_capacity: number;
   display: Display;
-}
+};
+//Productos paginados
+export type ProductData = {
+  total: number;
+  pages: number;
+  first: number;
+  next: number | null;
+  prev: number | null;
+  data: Product[];
+};
+//Filtros/ marcas de productos
+type Item = {
+  name: string;
+};
+
+export type ProductFilters = {
+  brands: Item[];
+  processors: Item[];
+  displays: Item[];
+};
+//marcas
+export type ProductBrands = {
+  id: number;
+  name: string;
+};
+//pantallas
+export type ProductDisplays = Display & {
+  id: number;
+};
+//sistemas
+export type ProductOS = OperatingSystem & {
+  id: number;
+};
+//procesadores
+export type ProductProcessors = Processor & {
+  id: number;
+};

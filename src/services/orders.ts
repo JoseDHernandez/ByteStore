@@ -1,3 +1,4 @@
+"use server";
 import { Order } from "@/types/order";
 import { http } from "./http";
 

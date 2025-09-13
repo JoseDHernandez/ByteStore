@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { registerSchema } from "@/types/zodSchemas";
+import { registerSchema } from "@/schemas/usersSchemas";
 import { signIn } from "next-auth/react";
 import { postUser } from "@/services/users";
 export default function RegisterPage() {

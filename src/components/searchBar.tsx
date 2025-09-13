@@ -3,7 +3,7 @@ import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { BiSearchAlt } from "react-icons/bi";
 import { useState } from "react";
-import { searchSchema } from "@/types/zodSchemas";
+import { searchSchema } from "@/schemas/searchSchema";
 
 export default function SearchBar() {
   const [query, setQuery] = useState("");
@@ -25,12 +25,12 @@ export default function SearchBar() {
   const search = (value: string) => {
     const params = new URLSearchParams(searchParams);
     if (value) {
-      params.set("query", value);
+      params.set("query", value.replaceAll(" ", ","));
     } else {
       params.delete("query");
     }
     if (!pathname.includes("/products")) {
-      return router.push(`/products?query=${value}`);
+      return router.push(`/products?query=${value.replaceAll(" ", ",")}`);
     } else {
       replace(`${pathname}?${params.toString()}`);
     }

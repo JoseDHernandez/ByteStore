@@ -1,3 +1,4 @@
+"use server";
 import { Review } from "@/types/review";
 import { http } from "./http";
 //Obtener review

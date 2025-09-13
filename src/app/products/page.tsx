@@ -1,12 +1,13 @@
 import Paginator from "@/components/paginator";
 import ProductsFilter from "./components/productsFilter";
-import type { Product } from "@/types/product";
+import type { Product, ProductData } from "@/types/product";
 import ProductCard from "@/components/productCard";
 import { numberFormat, getDiscount } from "@/utils/textFormatters";
 import Link from "next/link";
 import Score from "@/components/score";
-import { getProductsBySearch } from "@/services/products";
+import { getProductFilters, getProductsBySearch } from "@/services/products";
 import Image from "next/image";
+import { productURL } from "@/utils/productURLFormatters";
 //Metadata
 export const metadata = {
   title: "Productos - Byte Store",
@@ -26,35 +27,38 @@ export default async function ProductsPage({
   const { page, sort, order, query } = (await searchParams) ?? {};
   const numberPage = page ? parseInt(page) : 1;
   //consulta
-  const products: Product[] | null = await getProductsBySearch({
+  const productsData: ProductData | null = await getProductsBySearch({
     query,
     numberPage,
     sort,
     order,
   });
   //En caso de error
-  if (products === null)
+  if (!productsData)
     return (
       <section>
         <p>Error al obtener productos</p>
       </section>
     );
+  const products: Product[] = productsData.data;
+  //filtros
+  const filters = await getProductFilters();
   return (
     <section>
       <div className="flex flex-col md:flex-row gap-4">
-        <ProductsFilter />
+        <ProductsFilter filters={filters} />
         {products.length > 1 ? (
           <div className="lg:col-span-3 grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))]  lg:grid-cols-4 gap-4 w-full">
             {products.map((product, index) => {
               if (index >= 0 && index <= 2) {
                 return (
                   <Link
-                    href={`/products/${product.id}`}
+                    href={`/products/${productURL(product.id, product.name)}`}
                     key={product.id}
                     className={
                       index == 0
-                        ? "lg:col-span-2 lg:row-span-2"
-                        : "lg:col-span-2"
+                        ? "lg:col-span-2 lg:row-span-2 lg:max-h-[520px]"
+                        : "lg:col-span-2 lg:max-h-[250px]"
                     }
                   >
                     <article
@@ -69,7 +73,7 @@ export default async function ProductsPage({
                       >
                         {product.name}
                       </h2>
-                      <div className="min-w-[200px] lg:w-full max-h-max lg:row-span-2 overflow-hidden">
+                      <div className="w-full max-h-max lg:row-span-2 overflow-hidden">
                         <Image
                           src={product.image}
                           width={index == 0 ? 350 : 200}
@@ -134,7 +138,7 @@ export default async function ProductsPage({
             {/* En caso de no haber resultados según la búsqueda  */}
             <p>
               No se encontraron productos para los términos:{" "}
-              <b>{query?.split(" ").join(", ")}</b>
+              <b>{query?.split(",").join(", ")}</b>
             </p>{" "}
             <br />
             <Link
@@ -147,7 +151,7 @@ export default async function ProductsPage({
         )}
       </div>
       <div>
-        <Paginator size={3} currentPage={Number(numberPage)} />
+        <Paginator currentPage={numberPage} totalPages={productsData.pages} />
       </div>
     </section>
   );

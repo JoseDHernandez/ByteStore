@@ -19,14 +19,21 @@ export default function Breadcrumb() {
     orders: "Órdenes",
     cart: "Carrito",
     account: "Cuenta",
-    admin: "Administrar",
+    //Rutas de administración
+    admin: "Administración",
+    processors: "Procesadores",
+    displays: "Pantallas",
+    order: "Ordenes",
+    users: "Usuarios",
+    comments: "Comentarios",
   };
   //Pagina actual
   const actualPage = paths[paths.length - 1];
   //Obtener nombre del producto
   useEffect(() => {
-    if (pathname.match(/^\/products\/([A-Za-z0-9\-]+)$/)) {
-      getProductById(actualPage)
+    //pagina de producto
+    if (pathname.match(/^\/(admin\/)?products\/([A-Za-z0-9\-:]+)$/)) {
+      getProductById(decodeURIComponent(actualPage).split(":")[0])
         .then((res) =>
           setProductName(
             res?.name
@@ -56,7 +63,7 @@ export default function Breadcrumb() {
           //Si es ultimo
           const isLast = index === paths.length - 1;
           //Validaciones del path
-          const isProduct = paths[0] === "products" && isLast && productName;
+          const isProduct = paths.includes("products") && isLast && productName;
           const isOrder =
             pathname.match(/^\/orders\/([A-Za-z0-9\-]+)$/) && isLast;
           //Asignar texto

@@ -13,11 +13,13 @@ export default async function Home() {
   //Cargar productos
   const products: Product[] | null = await getProductsLimited(15);
   if (products === null || products.length == 0) notFound();
+  const productURL = (id: string, name: string) =>
+    `${id}:${name.replaceAll(" ", "-")}`;
   return (
     <>
       <section className="grid mt-8  gap-9  grid-cols-1 md:grid-cols-2 lg:grid-rows-2 lg:grid-cols-4">
         <Link
-          href={`/products/${products[0].id}`}
+          href={`/products/${productURL(products[0].id, products[0].name)}`}
           className="md:col-span-2 lg:row-span-2"
         >
           <article className=" p-4 bg-white border-1 border-gray shadow-xl rounded-2xl h-full group hover:shadow-2xl transition duration-300 ease-in-ou">
@@ -50,7 +52,7 @@ export default async function Home() {
         </Link>
         {products.slice(1, 3).map((product) => (
           <Link
-            href={`/products/${product.id}`}
+            href={`/products/${productURL(product.id, product.name)}`}
             key={product.id}
             className="lg:col-span-2"
           >
@@ -91,7 +93,10 @@ export default async function Home() {
         </h2>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))]  gap-5">
           {products.slice(3).map((product) => (
-            <Link key={product.id} href={`/products/${product.id}`}>
+            <Link
+              key={product.id}
+              href={`/products/${productURL(product.id, product.name)}`}
+            >
               <CardProduct data={product} />
             </Link>
           ))}
