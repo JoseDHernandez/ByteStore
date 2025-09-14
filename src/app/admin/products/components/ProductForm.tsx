@@ -1,12 +1,10 @@
 "use client";
-import {
-  Product,
-  ProductBrands,
-  ProductDisplays,
-  ProductOS,
-  ProductProcessors,
-} from "@/types/product";
+import { Product } from "@/types/product";
 import { useState } from "react";
+import type { BrandData } from "@/types/brand";
+import type { DisplaysData } from "@/types/display";
+import type { OperatingSystemData } from "@/types/system";
+import type { ProcessorData } from "@/types/processor";
 import Link from "next/link";
 import {
   productRegisterSchema,
@@ -19,10 +17,10 @@ import { uploadImage } from "@/services/images";
 
 interface Props {
   product?: Product; // opcional
-  productDisplays: ProductDisplays[];
-  productOS: ProductOS[];
-  productProcessors: ProductProcessors[];
-  productBrands: ProductBrands[];
+  productDisplays: DisplaysData[];
+  productOS: OperatingSystemData[];
+  productProcessors: ProcessorData[];
+  productBrands: BrandData[];
 }
 
 export default function EditProductForm({
@@ -150,7 +148,7 @@ export default function EditProductForm({
         distribution: formData.get("os.dis") as string | null,
       },
     };
-    const getProcessor: ProductProcessors | undefined = productProcessors.find(
+    const getProcessor: ProcessorData | undefined = productProcessors.find(
       (e) =>
         e.model == data.processor.model &&
         e.brand == data.processor.brand &&

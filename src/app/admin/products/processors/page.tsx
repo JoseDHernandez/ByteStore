@@ -1,21 +1,23 @@
 "use client";
 
-import { deleteProcessorById, getProductProcessors } from "@/services/products";
-import { ProductProcessors } from "@/types/product";
+import { deleteProcessorById, getAllProcessors } from "@/services/processors";
 import { notFound } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
 import TableSkeleton from "@/components/skeletons/tableSkeleton";
 import { BiTrashAlt, BiPencil } from "react-icons/bi";
 import Modal from "@/components/modal";
 import Link from "next/link";
-
+import { ProcessorData } from "@/types/processor";
+import { useAlerts } from "@/context/altersContext";
 export default function AdminProcessorsPage() {
-  const [processors, setProcessors] = useState<ProductProcessors[]>([]);
+  const { addAlert } = useAlerts();
+  const [processors, setProcessors] = useState<ProcessorData[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Modal
-  const [modalProcessor, setModalProcessor] =
-    useState<ProductProcessors | null>(null);
+  const [modalProcessor, setModalProcessor] = useState<ProcessorData | null>(
+    null
+  );
   const [modalOpen, setModalOpen] = useState(false);
 
   // Filtros
@@ -24,7 +26,7 @@ export default function AdminProcessorsPage() {
   const [cores, setCores] = useState("");
 
   // Abrir modal
-  const openModal = (processor: ProductProcessors) => {
+  const openModal = (processor: ProcessorData) => {
     setModalProcessor(processor);
     setModalOpen(true);
   };
@@ -33,7 +35,7 @@ export default function AdminProcessorsPage() {
     const fetchProcessors = async () => {
       try {
         setLoading(true);
-        const res = await getProductProcessors();
+        const res = await getAllProcessors();
         if (!res) return notFound();
         setProcessors(res);
       } catch (error) {
@@ -89,6 +91,7 @@ export default function AdminProcessorsPage() {
       const res = await deleteProcessorById(modalProcessor.id);
       if (res !== 200) return alert("Error eliminando");
       setProcessors(processors.filter((e) => e.id !== modalProcessor.id));
+      addAlert("Procesador eliminado", "success");
     } catch (err) {
       console.error(err);
     } finally {
@@ -173,7 +176,7 @@ export default function AdminProcessorsPage() {
       <div>
         {loading && <TableSkeleton columns={4} rows={10} size={90} />}
         {filteredProcessors.length > 0 ? (
-          <table width="100%">
+          <table width="100%" className="rounded-md overflow-hidden">
             <thead className="bg-dark-blue text-white">
               <tr>
                 <th className="p-2 text-lg">Marca</th>

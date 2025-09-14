@@ -8,5 +8,5 @@ export type Processor = {
 };
 //datos
 export type ProcessorData = Processor & {
-  id: number;
+  id: string;
 };

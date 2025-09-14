@@ -1,16 +1,14 @@
 import { notFound } from "next/navigation";
-import {
-  getProductBrands,
-  getProductDisplays,
-  getProductOS,
-  getProductProcessors,
-} from "@/services/products";
+import { getAllBrands } from "@/services/brands";
+import { getAllDisplays } from "@/services/displays";
+import { getAllOS } from "@/services/systems";
+import { getAllProcessors } from "@/services/processors";
 import ProductForm from "../components/ProductForm";
 export default async function ProductCreatePage() {
-  const productBrands = await getProductBrands();
-  const productsDisplays = await getProductDisplays();
-  const productProcessors = await getProductProcessors();
-  const productsOS = await getProductOS();
+  const productBrands = await getAllBrands();
+  const productsDisplays = await getAllDisplays();
+  const productProcessors = await getAllProcessors();
+  const productsOS = await getAllOS();
   if (!productBrands || !productsDisplays || !productProcessors || !productsOS)
     notFound();
   return (

@@ -17,7 +17,7 @@ export const getUserById = async (id: string): Promise<UserUpdate | null> => {
   }
 };
 //Actualizar usuario
-export const putUser = async (user: UserUpdate): Promise<number> => {
+export const updateUser = async (user: UserUpdate): Promise<number> => {
   try {
     const res = await api.put(`/users/${user.id}`, { user });
     return res.status;
@@ -43,7 +43,7 @@ export const getUserForLogin = async (
   }
 };
 //Registrar usuario
-export const postUser = async (user: UserRegister): Promise<number> => {
+export const createUser = async (user: UserRegister): Promise<number> => {
   try {
     const res = await api.post(`/users/sign-up`, { ...user, role: 0 });
     return res.status;
@@ -56,7 +56,7 @@ export const postUser = async (user: UserRegister): Promise<number> => {
   }
 };
 //cambiar contraseña
-export const patchPassword = async (
+export const changePassword = async (
   user: UserChangePassword
 ): Promise<number> => {
   try {

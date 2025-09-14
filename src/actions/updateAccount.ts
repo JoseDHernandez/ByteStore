@@ -1,5 +1,5 @@
 "use server";
-import { putUser } from "@/services/users";
+import { updateUser } from "@/services/users";
 import { updateAccountSchema } from "@/types/zodSchemas";
 import { UserUpdate } from "@/types/user";
 export const updateAccount = async (
@@ -21,6 +21,6 @@ export const updateAccount = async (
     return { errors: validate.error.flatten().fieldErrors };
   }
   //Actualizar
-  const res = await putUser(validate.data);
+  const res = await updateUser(validate.data);
   return res === 200 ? { success: true } : { success: false };
 };

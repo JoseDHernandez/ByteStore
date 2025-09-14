@@ -10,3 +10,12 @@ export type Order = {
   pay_date: string;
   delivery_date: string;
 };
+//datos paginados
+export type OrderData = {
+  total: number;
+  pages: number;
+  first: number;
+  next: number | null;
+  prev: number | null;
+  data: Order[];
+};

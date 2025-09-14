@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Modal from "@/components/modal";
 import Alert from "@/components/alert";
-import { patchPassword } from "@/services/users";
+import { changePassword } from "@/services/users";
 import { updatePasswordSchema } from "@/schemas/usersSchemas";
 interface Props {
   id: string;
@@ -43,7 +43,7 @@ export default function UpdatePasswordForm({ id }: Props) {
     const d = data.data;
     if (!d?.id) return;
     //actualizar
-    const status = await patchPassword({ id: d.id, password: d.password });
+    const status = await changePassword({ id: d.id, password: d.password });
     //mensaje de éxito
     if (status === 200) {
       setModalOpen(false);

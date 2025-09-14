@@ -1,5 +1,7 @@
 import { z } from "zod";
 import { processorSchema } from "./processorSchemas";
+import { displaySchema } from "./displaySchemas";
+import { systemSchema } from "./systemSchema";
 //Actualización de un producto
 export const productUpdateSchema = z.object({
   name: z
@@ -60,42 +62,9 @@ export const productRegisterSchema = z.object({
     .min(10)
     .max(1000)
     .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\.\,\'\"\(\)\-\!\¡]+$/),
-  display: z.object({
-    size: z.number().gte(10.0).lte(20.0),
-    resolution: z
-      .string()
-      .trim()
-      .min(2)
-      .max(10)
-      .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
-    brand: z
-      .string()
-      .trim()
-      .min(3)
-      .max(30)
-      .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
-    graphics: z
-      .string()
-      .trim()
-      .min(3)
-      .max(30)
-      .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
-  }),
+  display: displaySchema,
 
   processor: processorSchema,
 
-  system: z.object({
-    system: z
-      .string()
-      .trim()
-      .min(3)
-      .max(30)
-      .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
-    distribution: z
-      .string()
-      .trim()
-      .min(3)
-      .max(30)
-      .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
-  }),
+  system: systemSchema,
 });

@@ -3,10 +3,9 @@
 import { useEffect, useState } from "react";
 import {
   createProcessor,
-  getProductProcessors,
+  getAllProcessors,
   updateProcessor,
-} from "@/services/products";
-import { ProductProcessors } from "@/types/product";
+} from "@/services/processors";
 import { processorSchema } from "@/schemas/processorSchemas";
 import Link from "next/link";
 import { ProcessorData } from "@/types/processor";
@@ -17,7 +16,7 @@ type Props = {
 
 export default function ProcessorForm({ initialData }: Props) {
   const { addAlert } = useAlerts();
-  const [processors, setProcessors] = useState<ProductProcessors[]>([]);
+  const [processors, setProcessors] = useState<ProcessorData[]>([]);
 
   // Estados de selects/inputs dinámicos
   const [brand, setBrand] = useState(initialData?.brand ?? "");
@@ -33,7 +32,7 @@ export default function ProcessorForm({ initialData }: Props) {
   useEffect(() => {
     const fetchProcessors = async () => {
       try {
-        const res = await getProductProcessors();
+        const res = await getAllProcessors();
         if (res) setProcessors(res);
       } catch (err) {
         console.error(err);

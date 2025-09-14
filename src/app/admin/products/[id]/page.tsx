@@ -1,11 +1,9 @@
 import { notFound } from "next/navigation";
-import {
-  getProductBrands,
-  getProductById,
-  getProductDisplays,
-  getProductOS,
-  getProductProcessors,
-} from "@/services/products";
+import { getProductById } from "@/services/products";
+import { getAllBrands } from "@/services/brands";
+import { getAllDisplays } from "@/services/displays";
+import { getAllOS } from "@/services/systems";
+import { getAllProcessors } from "@/services/processors";
 import { getProductIdFromURL } from "@/utils/productURLFormatters";
 import ProductForm from "../components/ProductForm";
 export default async function ProductUpdatePage({
@@ -14,11 +12,14 @@ export default async function ProductUpdatePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const product = await getProductById(getProductIdFromURL(id));
-  const productBrands = await getProductBrands();
-  const productsDisplays = await getProductDisplays();
-  const productProcessors = await getProductProcessors();
-  const productsOS = await getProductOS();
+  const productId = getProductIdFromURL(id);
+  const r = /^[0-9]+$/;
+  if (!productId.match(r)) return;
+  const product = await getProductById(productId);
+  const productBrands = await getAllBrands();
+  const productsDisplays = await getAllDisplays();
+  const productProcessors = await getAllProcessors();
+  const productsOS = await getAllOS();
   if (
     !product ||
     !productBrands ||

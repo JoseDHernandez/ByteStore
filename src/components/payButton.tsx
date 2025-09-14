@@ -7,7 +7,7 @@ import { useCart } from "@/context/cartcontext";
 import { getDiscount } from "@/utils/textFormatters";
 import { Order, ProductsOrder } from "@/types/order";
 import { CartItem } from "@/types/cart";
-import { postOrder } from "@/services/orders";
+import { createOrder } from "@/services/orders";
 interface Props {
   text?: string;
   disabled?: boolean;
@@ -62,7 +62,7 @@ export default function PayButton({
       pay_date: payDate,
       delivery_date: deliveryDate,
     };
-    const res = await postOrder(data);
+    const res = await createOrder(data);
     if (res == 201) {
       clearCart();
       router.push("/orders");

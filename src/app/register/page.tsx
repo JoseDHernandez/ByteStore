@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { registerSchema } from "@/schemas/usersSchemas";
 import { signIn } from "next-auth/react";
-import { postUser } from "@/services/users";
+import { createUser } from "@/services/users";
 export default function RegisterPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +24,7 @@ export default function RegisterPage() {
     }
     try {
       //Registrar en el servidor
-      const res = await postUser(result.data);
+      const res = await createUser(result.data);
       //En caso de error
       if (res !== 201) {
         setError("No se pudo registrar el usuario");

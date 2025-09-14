@@ -1,4 +1,4 @@
-import { getProcessorById } from "@/services/products";
+import { getProcessorById } from "@/services/processors";
 import { notFound } from "next/navigation";
 import ProcessorForm from "../components/ProcessorForm";
 
@@ -8,7 +8,7 @@ export default async function ProcessorUpdatePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const processor = await getProcessorById(Number(id));
+  const processor = await getProcessorById(id);
   if (!processor) return notFound();
   return (
     <section>

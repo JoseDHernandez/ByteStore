@@ -1,23 +1,38 @@
 "use client";
-import { useState } from "react";
-import { Review } from "@/types/review";
+import { useEffect, useState } from "react";
+import { Review, ReviewData } from "@/types/review";
 import { reviewSchema } from "@/schemas/reviewsSchemas";
 import { BiCommentCheck } from "react-icons/bi";
 import Score from "@/components/score";
 import Link from "next/link";
-import { postReview } from "@/services/reviews";
+import { createReview, getReviewsByProductId } from "@/services/reviews";
+import Paginator from "@/components/paginator";
+import { useSearchParams } from "next/navigation";
 interface Props {
-  reviewsData: Review[] | null;
   session: string | null;
   product_id: string;
 }
-export default function CommentSection({
-  reviewsData,
-  product_id,
-  session,
-}: Props) {
+export default function CommentSection({ product_id, session }: Props) {
+  //paginación
+  const searchParams = useSearchParams();
+  const numberPage = parseInt(searchParams.get("page") ?? "1");
   //Comentarios
-  const [reviews, setReviews] = useState<Review[] | null>(reviewsData);
+  const [reviewsData, setReviewsData] = useState<ReviewData | null>(null);
+  const [reviews, setReviews] = useState<Review[] | null>(null);
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        //Obtener calificaciones
+        const res = await getReviewsByProductId(product_id);
+        setReviewsData(res ?? null);
+      };
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [numberPage, product_id]);
+  setReviews(reviewsData ? reviewsData.data : null);
+  //publicar calificación
   const reviewAction = async (formData: FormData) => {
     //Generar campos de la reseña
     const qualification = Number(formData.get("qualification"));
@@ -39,7 +54,7 @@ export default function CommentSection({
 
     if (session && reviewSchema.safeParse(review)) {
       //Publicar reseña
-      const res = await postReview(review);
+      const res = await createReview(review);
       if (res !== 201) return alert("Error al publicar reseña"); //Pendiente de componente de avisos
     }
   };
@@ -135,6 +150,14 @@ export default function CommentSection({
           </div>
         </div>
       </form>
+      {/*Paginación de comentarios*/}
+      {reviewsData && (
+        <Paginator
+          size={4}
+          totalPages={reviewsData.pages}
+          currentPage={numberPage}
+        />
+      )}
     </section>
   );
 }

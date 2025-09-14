@@ -153,7 +153,7 @@ export default function ProductsTable() {
       {products && products.data.length > 0 ? (
         <>
           <div className="overflow-x-scroll lg:overflow-x-auto">
-            <table className="table-auto w-full border-collapse my-4">
+            <table className="table-auto w-full border-collapse my-4 rounded-md overflow-hidden">
               <thead className="bg-dark-blue text-white">
                 <tr>
                   <th colSpan={2} className="p-2 text-lg">

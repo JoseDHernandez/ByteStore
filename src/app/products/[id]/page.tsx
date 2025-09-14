@@ -43,8 +43,6 @@ export default async function ProductPage({
   const product = await getProductById(getProductIdFromURL(id));
   const products = await getProductsLimited(5);
   if (product === null || products === null) notFound();
-  //Obtener calificaciones
-  const reviews = await getReviewsByProductId(product.id);
   //Calcular capacidad
   const capacity =
     product.disk_capacity > 999
@@ -246,11 +244,7 @@ export default async function ProductPage({
           ))}
         </div>
       </section>
-      <CommentSection
-        reviewsData={reviews}
-        product_id={product.id}
-        session={username}
-      />
+      <CommentSection product_id={product.id} session={username} />
     </main>
   );
 }

@@ -1,16 +1,7 @@
+import { Display } from "./display";
 import type { Processor } from "./processor";
-//tipo de display
-export type Display = {
-  size: number;
-  resolution: string;
-  graphics: string;
-  brand: string;
-};
-//sistema
-export type OperatingSystem = {
-  system: string;
-  distribution: string;
-};
+import { OperatingSystem } from "./system";
+
 //Producto
 export type Product = {
   id: string;
@@ -41,30 +32,12 @@ export type ProductData = {
 type Item = {
   name: string;
 };
-
 export type ProductFilters = {
   brands: Item[];
   processors: Item[];
   displays: Item[];
 };
-//marcas
-export type ProductBrands = {
-  id: number;
-  name: string;
-};
-//pantallas
-export type ProductDisplays = Display & {
-  id: number;
-};
-//sistemas
-export type ProductOS = OperatingSystem & {
-  id: number;
-};
-//procesadores
-export type ProductProcessors = Processor & {
-  id: number;
-};
-//actualizar procesador
+//actualizar producto
 export type ProductUpdate = Omit<
   Product,
   "processor" | "system" | "display" | "image" | "brand" | "id"

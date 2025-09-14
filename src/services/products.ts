@@ -2,18 +2,15 @@
 import {
   NewProduct,
   Product,
-  ProductBrands,
   ProductData,
-  ProductDisplays,
   ProductFilters,
-  ProductOS,
-  ProductProcessors,
   ProductUpdate,
 } from "@/types/product";
 import { api } from "./http";
-import { Processor, ProcessorData } from "@/types/processor";
 //Obtener producto por id
 export const getProductById = async (id: string): Promise<Product | null> => {
+  const r = /^[0-9]+$/;
+  if (!id.match(r)) return null;
   try {
     const res = await api.get<Product>(`/products/${id}`);
     return res.data;
@@ -110,57 +107,13 @@ export const getProductFilters = async (): Promise<ProductFilters | null> => {
     return null;
   }
 };
-//obtener marcas
-export const getProductBrands = async (): Promise<ProductBrands[] | null> => {
-  try {
-    const res = await api.get("/products/brands/");
-    return res.data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
-//obtener pantallas
-export const getProductDisplays = async (): Promise<
-  ProductDisplays[] | null
-> => {
-  try {
-    const res = await api.get("/products/displays/");
-    return res.data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
-//obtener procesadores
-export const getProductProcessors = async (): Promise<
-  ProductProcessors[] | null
-> => {
-  try {
-    const res = await api.get("/products/processors/");
-    return res.data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
-//sistemas operativos
-export const getProductOS = async (): Promise<ProductOS[] | null> => {
-  try {
-    const res = await api.get("/products/operating-systems/");
-    return res.data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
 //actualizar
 export const updateProductById = async (
   id: string,
   product: ProductUpdate
 ): Promise<number> => {
   try {
-    const res = await api.put(`/products/${id}`, { ...product });
+    const res = await api.put(`/products/${id}`, product);
     return res.status;
   } catch (error) {
     console.error(error);
@@ -170,52 +123,7 @@ export const updateProductById = async (
 //crear producto
 export const createProduct = async (product: NewProduct): Promise<number> => {
   try {
-    const res = await api.post(`/products/`, { ...product });
-    return res.status;
-  } catch (error) {
-    console.error(error);
-    return 400;
-  }
-};
-//eliminar procesador
-export const deleteProcessorById = async (id: number): Promise<number> => {
-  try {
-    const res = await api.delete(`/products/processors/${id}`);
-    return res.status;
-  } catch (error) {
-    console.error(`Error al eliminar el procesador ${id}`, error);
-    return 400;
-  }
-};
-//obtener procesador
-export const getProcessorById = async (
-  id: number
-): Promise<ProcessorData | null> => {
-  try {
-    const res = await api.get(`/products/processors/${id}`);
-    return res.data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
-//crear procesador
-export const createProcessor = async (data: Processor): Promise<number> => {
-  try {
-    const res = await api.post(`/products/processors/`, data);
-    return res.status;
-  } catch (error) {
-    console.error(error);
-    return 400;
-  }
-};
-//actualizar procesador
-export const updateProcessor = async (
-  id: number,
-  data: Processor
-): Promise<number> => {
-  try {
-    const res = await api.put(`/products/processors/${id}`, data);
+    const res = await api.post(`/products/`, product);
     return res.status;
   } catch (error) {
     console.error(error);
