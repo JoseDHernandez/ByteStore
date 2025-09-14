@@ -1,11 +1,4 @@
-//tipo de procesador
-export type Processor = {
-  brand: string;
-  family: string;
-  model: string;
-  cores: number;
-  speed: string;
-};
+import type { Processor } from "./processor";
 //tipo de display
 export type Display = {
   size: number;

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { processorSchema } from "./processorSchemas";
 //Actualización de un producto
 export const productUpdateSchema = z.object({
   name: z
@@ -81,32 +82,7 @@ export const productRegisterSchema = z.object({
       .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
   }),
 
-  processor: z.object({
-    brand: z
-      .string()
-      .trim()
-      .min(3)
-      .max(30)
-      .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
-    family: z
-      .string()
-      .trim()
-      .min(3)
-      .max(30)
-      .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
-    model: z
-      .string()
-      .trim()
-      .min(3)
-      .max(30)
-      .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
-    cores: z.number().int().gte(4).lte(64),
-    speed: z
-      .string()
-      .min(1)
-      .max(200)
-      .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\.\,\-\)\(\\)]+$/),
-  }),
+  processor: processorSchema,
 
   system: z.object({
     system: z

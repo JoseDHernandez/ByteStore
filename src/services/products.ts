@@ -11,6 +11,7 @@ import {
   ProductUpdate,
 } from "@/types/product";
 import { api } from "./http";
+import { Processor, ProcessorData } from "@/types/processor";
 //Obtener producto por id
 export const getProductById = async (id: string): Promise<Product | null> => {
   try {
@@ -170,6 +171,51 @@ export const updateProductById = async (
 export const createProduct = async (product: NewProduct): Promise<number> => {
   try {
     const res = await api.post(`/products/`, { ...product });
+    return res.status;
+  } catch (error) {
+    console.error(error);
+    return 400;
+  }
+};
+//eliminar procesador
+export const deleteProcessorById = async (id: number): Promise<number> => {
+  try {
+    const res = await api.delete(`/products/processors/${id}`);
+    return res.status;
+  } catch (error) {
+    console.error(`Error al eliminar el procesador ${id}`, error);
+    return 400;
+  }
+};
+//obtener procesador
+export const getProcessorById = async (
+  id: number
+): Promise<ProcessorData | null> => {
+  try {
+    const res = await api.get(`/products/processors/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+//crear procesador
+export const createProcessor = async (data: Processor): Promise<number> => {
+  try {
+    const res = await api.post(`/products/processors/`, data);
+    return res.status;
+  } catch (error) {
+    console.error(error);
+    return 400;
+  }
+};
+//actualizar procesador
+export const updateProcessor = async (
+  id: number,
+  data: Processor
+): Promise<number> => {
+  try {
+    const res = await api.put(`/products/processors/${id}`, data);
     return res.status;
   } catch (error) {
     console.error(error);

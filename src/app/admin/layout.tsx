@@ -15,7 +15,7 @@ export default function AdminLayout({
       <aside>
         <AdminNavMenu />
       </aside>
-      <div className="w-full p-4 bg-white border-1 border-gray shadow-xl rounded-2xl">
+      <div className="w-full p-4 bg-white border-1 border-gray shadow-xl rounded-2xl min-h-max">
         {children}
       </div>
     </div>
