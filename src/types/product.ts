@@ -71,3 +71,15 @@ export type ProductOS = OperatingSystem & {
 export type ProductProcessors = Processor & {
   id: number;
 };
+//actualizar procesador
+export type ProductUpdate = Omit<
+  Product,
+  "processor" | "system" | "display" | "image" | "brand" | "id"
+> & {
+  processor_id: number;
+  system_id: number;
+  display_id: number;
+  brand_id: number;
+};
+//crear producto
+export type NewProduct = Omit<Product, "id"> & {};

@@ -22,7 +22,7 @@ export default function Breadcrumb() {
     //Rutas de administración
     admin: "Administración",
     processors: "Procesadores",
-    displays: "Pantallas",
+    graphics: "Gráficos",
     order: "Ordenes",
     users: "Usuarios",
     comments: "Comentarios",

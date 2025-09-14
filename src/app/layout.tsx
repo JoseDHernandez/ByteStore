@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Barlow } from "next/font/google";
 import { CartProvider } from "@/context/cartcontext";
 import { SessionProvider } from "next-auth/react";
+import { AlertsProvider } from "@/context/altersContext";
 import Breadcrumb from "@/components/breadcrumb";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
@@ -37,10 +38,12 @@ export default function RootLayout({
           {/*Contexto del carrito de compras*/}
           <CartProvider>
             <Header />
-            <main className="container mx-auto mt-4 max-w-[100rem] px-[5dvw] min-h-screen">
-              <Breadcrumb />
-              {children}
-            </main>
+            <AlertsProvider>
+              <main className="container mx-auto mt-4 max-w-[100rem] px-[5dvw] min-h-screen">
+                <Breadcrumb />
+                {children}
+              </main>
+            </AlertsProvider>
           </CartProvider>
         </SessionProvider>
         <Footer />

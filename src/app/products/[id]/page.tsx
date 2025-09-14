@@ -123,6 +123,20 @@ export default async function ProductPage({
               </span>
               <span className="block col-span-2">{product.model}</span>
             </p>
+            <p className="grid grid-cols-3 border-b-1 p-2 border-dark-gray">
+              <span className="block">
+                <b>Sistema</b>
+              </span>
+              <span className="block col-span-2">{product.system.system}</span>
+            </p>
+            <p className="grid grid-cols-3 border-b-1 p-2 border-dark-gray">
+              <span className="block">
+                <b>Distribuci&oacute;n</b>
+              </span>
+              <span className="block col-span-2">
+                {product.system.distribution}
+              </span>
+            </p>
           </div>
           <h3 className="text-2xl font-bold text-dark-blue">
             Almacenamiento y procesamiento

@@ -17,15 +17,16 @@ export const productUpdateSchema = z.object({
   discount: z.number().positive().lte(90),
   ram_capacity: z.number().gte(8).lte(128),
   disk_capacity: z.number().gte(120).lte(10000),
+  stock: z.int().positive(),
   description: z
     .string()
     .min(10)
     .max(1000)
-    .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\.\,\'\"\(\)\-]+$/),
-  processor_id: z.int().gte(1),
-  system_id: z.int().gte(1),
-  display_id: z.int().gte(1),
-  brand_id: z.int().gte(1),
+    .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\.\,\'\"\(\)\-\!\¡]+$/),
+  processor_id: z.int().positive(),
+  system_id: z.int().positive(),
+  display_id: z.int().positive(),
+  brand_id: z.int().positive(),
 });
 //crear producto
 export const productRegisterSchema = z.object({
@@ -47,76 +48,78 @@ export const productRegisterSchema = z.object({
     .min(2)
     .max(10)
     .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
+  stock: z.int().positive(),
   price: z.number().gte(100000.0).lte(20000000.0),
-  discount: z.number().positive().lte(90),
+  discount: z.number().gte(0).lte(90),
   ram_capacity: z.number().gte(8).lte(128),
   disk_capacity: z.number().gte(120).lte(10000),
+  image: z.string().regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\-\.]+$/),
   description: z
     .string()
     .min(10)
     .max(1000)
-    .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\.\,\'\"\(\)\-]+$/),
-  display: {
+    .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\.\,\'\"\(\)\-\!\¡]+$/),
+  display: z.object({
     size: z.number().gte(10.0).lte(20.0),
     resolution: z
       .string()
       .trim()
       .min(2)
       .max(10)
-      .regex(/^[\w\d\s]+$/),
+      .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
     brand: z
       .string()
       .trim()
       .min(3)
       .max(30)
-      .regex(/^[\w\d\s]+$/),
+      .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
     graphics: z
       .string()
       .trim()
       .min(3)
       .max(30)
-      .regex(/^[\w\d\s]+$/),
-  },
+      .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
+  }),
 
-  processor: {
+  processor: z.object({
     brand: z
       .string()
       .trim()
       .min(3)
       .max(30)
-      .regex(/^[\w\d]+$/),
+      .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
     family: z
       .string()
       .trim()
       .min(3)
       .max(30)
-      .regex(/^[\w\d\s]+$/),
+      .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
     model: z
       .string()
       .trim()
       .min(3)
       .max(30)
-      .regex(/^[\w\d\-]+$/),
-    cores: z.int().gte(4).lte(64),
+      .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
+    cores: z.number().int().gte(4).lte(64),
     speed: z
       .string()
-      .min(10)
+      .min(1)
       .max(200)
       .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\.\,\-\)\(\\)]+$/),
-  },
+  }),
 
-  system: {
+  system: z.object({
     system: z
       .string()
       .trim()
       .min(3)
       .max(30)
-      .regex(/^[\w\d\s]+$/),
+      .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
     distribution: z
       .string()
       .trim()
       .min(3)
       .max(30)
-      .regex(/^[\w\d\s]+$/),
-  },
+      .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
+  }),
 });

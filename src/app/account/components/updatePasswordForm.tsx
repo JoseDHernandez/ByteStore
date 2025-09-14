@@ -3,7 +3,7 @@ import { useState } from "react";
 import Modal from "@/components/modal";
 import Alert from "@/components/alert";
 import { patchPassword } from "@/services/users";
-import { updatePasswordSchema } from "@/types/zodSchemas";
+import { updatePasswordSchema } from "@/schemas/usersSchemas";
 interface Props {
   id: string;
 }

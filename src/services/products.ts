@@ -1,5 +1,6 @@
 "use server";
 import {
+  NewProduct,
   Product,
   ProductBrands,
   ProductData,
@@ -7,6 +8,7 @@ import {
   ProductFilters,
   ProductOS,
   ProductProcessors,
+  ProductUpdate,
 } from "@/types/product";
 import { api } from "./http";
 //Obtener producto por id
@@ -149,5 +151,28 @@ export const getProductOS = async (): Promise<ProductOS[] | null> => {
   } catch (error) {
     console.error(error);
     return null;
+  }
+};
+//actualizar
+export const updateProductById = async (
+  id: string,
+  product: ProductUpdate
+): Promise<number> => {
+  try {
+    const res = await api.put(`/products/${id}`, { ...product });
+    return res.status;
+  } catch (error) {
+    console.error(error);
+    return 400;
+  }
+};
+//crear producto
+export const createProduct = async (product: NewProduct): Promise<number> => {
+  try {
+    const res = await api.post(`/products/`, { ...product });
+    return res.status;
+  } catch (error) {
+    console.error(error);
+    return 400;
   }
 };

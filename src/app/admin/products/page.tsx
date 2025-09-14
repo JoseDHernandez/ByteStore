@@ -5,7 +5,7 @@ import { numberFormat } from "@/utils/textFormatters";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import TableSkeleton from "@/components/skeletons/tableSkeleton";
-import { BiEditAlt, BiLink, BiTrashAlt } from "react-icons/bi";
+import { BiTrashAlt, BiShow, BiPencil } from "react-icons/bi";
 import Modal from "../../../components/modal";
 import Paginator from "@/components/paginator";
 import {
@@ -68,7 +68,6 @@ export default function ProductsTable() {
         });
         if (data === null) return notFound();
         setProducts(data);
-        console.log(data.data.length);
       } catch (err) {
         console.error(err);
         setError(true);
@@ -115,7 +114,7 @@ export default function ProductsTable() {
   return (
     <section>
       <h2 className="font-bold text-3xl mb-4">Gestor de productos</h2>
-      <div className="flex justify-between">
+      <div className="flex justify-between flex-wrap gap-4">
         <input
           defaultValue={query}
           type="search"
@@ -126,9 +125,12 @@ export default function ProductsTable() {
           className="border rounded-md h-full w-[80%] p-2 border-gray-400"
           onChange={(e) => handleSearch(e.target.value.trim())}
         />
-        <button className="bg-green p-2 rounded-md text-white ">
+        <Link
+          href="/admin/products/new"
+          className="bg-green p-2 rounded-md text-white "
+        >
           Nuevo producto
-        </button>
+        </Link>
       </div>
       <div className=" flex gap-4 items-center mt-4">
         <label htmlFor="quantity">Limite de registros por página</label>
@@ -150,82 +152,84 @@ export default function ProductsTable() {
       )}
       {products && products.data.length > 0 ? (
         <>
-          <table className="table-auto w-full border-collapse my-4">
-            <thead className="bg-dark-blue text-white">
-              <tr>
-                <th colSpan={2} className="p-2 text-lg">
-                  Producto
-                </th>
-                <th className="p-2 text-lg">Unidades</th>
-                <th className="p-2 text-lg">Precio</th>
-                <th className="p-2 text-lg">Descuento</th>
-                <th className="p-2 text-lg">Opciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.data.map((product) => (
-                <tr key={product.id} className="border-t-1 border-gray-300">
-                  <td className="p-2">
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      width={70}
-                      height={70}
-                    />
-                  </td>
-                  <td className="p-2">
-                    <p className="flex flex-col justify-around">
-                      <b>{product.name}</b>
-                      {`${product.brand} ${product.model}`}
-                    </p>
-                  </td>
-                  <td className="p-2 text-center">{product.stock}</td>
-                  <td className="p-2 text-center">
-                    {numberFormat(product.price)}
-                  </td>
-                  <td className="p-2 text-center">
-                    {product.discount > 0
-                      ? product.discount.toString().concat(" %")
-                      : 0}
-                  </td>
-                  <td className="p-2">
-                    <div className="flex justify-around">
-                      <button
-                        onClick={() => openModal(product)}
-                        className="block p-1 rounded-md  hover:scale-105 transition duration-300 ease-in-out hover:bg-red-600 hover:text-white"
-                        title="Eliminar este producto"
-                        aria-label={`Eliminar ${product.name}`}
-                      >
-                        <BiTrashAlt size={30} />
-                      </button>
-                      <Link
-                        href={`/products/${productURL(
-                          product.id,
-                          product.name
-                        )}`}
-                        className="block p-1 rounded-md  hover:scale-105 transition duration-300 ease-in-out hover:text-white hover:bg-dark-blue"
-                        title="Ver página del producto"
-                        aria-label={`Ir a la página del producto ${product.name}`}
-                      >
-                        <BiLink size={30} />
-                      </Link>
-                      <Link
-                        href={`/admin/products/${productURL(
-                          product.id,
-                          product.name
-                        )}`}
-                        className="block p-1 rounded-md  hover:scale-105 transition duration-300 ease-in-out hover:text-white hover:bg-green"
-                        title="Editar producto"
-                        aria-label={`Editar ${product.name}`}
-                      >
-                        <BiEditAlt size={30} />
-                      </Link>
-                    </div>
-                  </td>
+          <div className="overflow-x-scroll lg:overflow-x-auto">
+            <table className="table-auto w-full border-collapse my-4">
+              <thead className="bg-dark-blue text-white">
+                <tr>
+                  <th colSpan={2} className="p-2 text-lg">
+                    Producto
+                  </th>
+                  <th className="p-2 text-lg">Unidades</th>
+                  <th className="p-2 text-lg">Precio</th>
+                  <th className="p-2 text-lg">Descuento</th>
+                  <th className="p-2 text-lg">Opciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {products.data.map((product) => (
+                  <tr key={product.id} className="border-t-1 border-gray-300">
+                    <td className="p-2">
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        width={70}
+                        height={70}
+                      />
+                    </td>
+                    <td className="p-2">
+                      <p className="flex flex-col justify-around">
+                        <b>{product.name}</b>
+                        {`${product.brand} ${product.model}`}
+                      </p>
+                    </td>
+                    <td className="p-2 text-center">{product.stock}</td>
+                    <td className="p-2 text-center">
+                      {numberFormat(product.price)}
+                    </td>
+                    <td className="p-2 text-center">
+                      {product.discount > 0
+                        ? product.discount.toString().concat(" %")
+                        : 0}
+                    </td>
+                    <td className="p-2">
+                      <div className="flex justify-around">
+                        <button
+                          onClick={() => openModal(product)}
+                          className="block p-1 rounded-md  hover:scale-105 transition duration-300 ease-in-out hover:bg-red-600 hover:text-white"
+                          title="Eliminar este producto"
+                          aria-label={`Eliminar ${product.name}`}
+                        >
+                          <BiTrashAlt size={30} />
+                        </button>
+                        <Link
+                          href={`/products/${productURL(
+                            product.id,
+                            product.name
+                          )}`}
+                          className="block p-1 rounded-md  hover:scale-105 transition duration-300 ease-in-out hover:text-white hover:bg-dark-blue"
+                          title="Ver página del producto"
+                          aria-label={`Ir a la página del producto ${product.name}`}
+                        >
+                          <BiShow size={30} />
+                        </Link>
+                        <Link
+                          href={`/admin/products/${productURL(
+                            product.id,
+                            product.name
+                          )}`}
+                          className="block p-1 rounded-md  hover:scale-105 transition duration-300 ease-in-out hover:text-white hover:bg-green"
+                          title="Editar producto"
+                          aria-label={`Editar ${product.name}`}
+                        >
+                          <BiPencil size={30} />
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           {modalOpen && modalProduct && (
             <Modal
               state={modalOpen}
