@@ -19,17 +19,19 @@ export default function Modal({ state, children, onClose, title }: Props) {
         className="p-4 rounded bg-white shadow-lg w-max max-w-[50dvw] h-max max-h-[50dvh] mx-auto min-h-max"
       >
         <div>
-          <div className="flex justify-between">
+          <div className="flex justify-between ">
             <p className="font-bold text-2xl">{title}</p>
-            <button
-              className="p-2 bg-dark-blue text-white font-bold rounded-md ml-6"
-              onClick={onClose}
-              aria-label="Cerrar modal"
-            >
-              <BiX size={25} />
-            </button>
+            <div>
+              <button
+                className="p-1 bg-p-red hover:bg-red-800 text-white font-bold rounded-md ml-6"
+                onClick={onClose}
+                aria-label="Cerrar modal"
+              >
+                <BiX size={25} />
+              </button>
+            </div>
           </div>
-          <div className="pt-4 px-2">{children}</div>
+          <div className="pt-5 pb-2 px-4">{children}</div>
         </div>
       </dialog>
     </div>

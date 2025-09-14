@@ -4,5 +4,5 @@ export type Brand = {
 };
 //marcas
 export type BrandData = Brand & {
-  id: number;
+  id: string;
 };

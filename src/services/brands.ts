@@ -22,13 +22,13 @@ export const getBrandById = async (id: string): Promise<BrandData | null> => {
   }
 };
 //crear
-export const createBrand = async (brand: Brand): Promise<number> => {
+export const createBrand = async (brand: Brand): Promise<BrandData | null> => {
   try {
     const res = await api.post("/products/brands/", brand);
-    return res.status;
+    return res.data;
   } catch (error) {
     console.error(error);
-    return 400;
+    return null;
   }
 };
 //actualizar
@@ -37,7 +37,7 @@ export const updateBrand = async (
   brand: Brand
 ): Promise<number> => {
   try {
-    const res = await api.put(`/products/brands/${id}`, brand);
+    const res = await api.patch(`/products/brands/${id}`, brand);
     return res.status;
   } catch (error) {
     console.error(error);

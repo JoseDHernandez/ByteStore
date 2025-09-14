@@ -1,37 +1,23 @@
 "use client";
-import { useEffect, useState } from "react";
-import { Review, ReviewData } from "@/types/review";
+import { useState } from "react";
+import { Review } from "@/types/review";
 import { reviewSchema } from "@/schemas/reviewsSchemas";
 import { BiCommentCheck } from "react-icons/bi";
 import Score from "@/components/score";
 import Link from "next/link";
-import { createReview, getReviewsByProductId } from "@/services/reviews";
-import Paginator from "@/components/paginator";
-import { useSearchParams } from "next/navigation";
+import { createReview } from "@/services/reviews";
 interface Props {
   session: string | null;
   product_id: string;
+  reviewsData: Review[] | null;
 }
-export default function CommentSection({ product_id, session }: Props) {
-  //paginación
-  const searchParams = useSearchParams();
-  const numberPage = parseInt(searchParams.get("page") ?? "1");
+export default function CommentSection({
+  product_id,
+  session,
+  reviewsData,
+}: Props) {
   //Comentarios
-  const [reviewsData, setReviewsData] = useState<ReviewData | null>(null);
-  const [reviews, setReviews] = useState<Review[] | null>(null);
-  useEffect(() => {
-    try {
-      const fetchData = async () => {
-        //Obtener calificaciones
-        const res = await getReviewsByProductId(product_id);
-        setReviewsData(res ?? null);
-      };
-      fetchData();
-    } catch (error) {
-      console.log(error);
-    }
-  }, [numberPage, product_id]);
-  setReviews(reviewsData ? reviewsData.data : null);
+  const [reviews, setReviews] = useState<Review[] | null>(reviewsData ?? null);
   //publicar calificación
   const reviewAction = async (formData: FormData) => {
     //Generar campos de la reseña
@@ -150,14 +136,6 @@ export default function CommentSection({ product_id, session }: Props) {
           </div>
         </div>
       </form>
-      {/*Paginación de comentarios*/}
-      {reviewsData && (
-        <Paginator
-          size={4}
-          totalPages={reviewsData.pages}
-          currentPage={numberPage}
-        />
-      )}
     </section>
   );
 }

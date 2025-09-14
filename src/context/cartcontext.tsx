@@ -13,8 +13,8 @@ import { useSession } from "next-auth/react";
 import {
   deleteCartById,
   getCartByUserId,
-  postCart,
-  putCart,
+  createCart,
+  updateCart,
 } from "@/services/cart";
 
 interface CartContextType {
@@ -97,7 +97,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           user_id: userId,
           products: cartData,
         };
-        const res = await putCart(data);
+        const res = await updateCart(data);
         if (res !== 200) {
           // carrito no existe, crearlo
           createCartToServer(cartData);
@@ -110,7 +110,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   //Crear
   const createCartToServer = async (cartData: CartItem[]) => {
     if (cart.length < 1 && !id) return;
-    const res = await postCart(userId, cartData);
+    const res = await createCart(userId, cartData);
     if (res !== 201) console.warn("Error al crear carrito");
   };
   //Eliminar

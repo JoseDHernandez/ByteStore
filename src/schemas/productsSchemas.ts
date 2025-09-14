@@ -2,6 +2,16 @@ import { z } from "zod";
 import { processorSchema } from "./processorSchemas";
 import { displaySchema } from "./displaySchemas";
 import { systemSchema } from "./systemSchema";
+export const brandSchema = z
+  .string()
+  .trim()
+  .min(2, "El nombre debe tener al menos 2 caracteres")
+  .max(50, "El nombre no puede superar los 50 caracteres")
+  .regex(
+    /^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/,
+    "Solo se permiten letras, números, espacios y guiones"
+  );
+
 //Actualización de un producto
 export const productUpdateSchema = z.object({
   name: z
@@ -45,12 +55,7 @@ export const productRegisterSchema = z.object({
     .min(5)
     .max(36)
     .regex(/^[\w\d\-\/\\]+$/),
-  brand: z
-    .string()
-    .trim()
-    .min(2)
-    .max(10)
-    .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/),
+  brand: brandSchema,
   stock: z.int().positive(),
   price: z.number().gte(100000.0).lte(20000000.0),
   discount: z.number().gte(0).lte(90),

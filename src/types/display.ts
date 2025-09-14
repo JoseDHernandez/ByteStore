@@ -7,5 +7,5 @@ export type Display = {
 };
 //pantallas desde el api
 export type DisplaysData = Display & {
-  id: number;
+  id: string;
 };

@@ -13,6 +13,7 @@ import { ChangeQuantity } from "./components/changeQuantity";
 import { AddCartButton } from "./components/addCartButton";
 import Image from "next/image";
 import { getProductIdFromURL, productURL } from "@/utils/productURLFormatters";
+import Paginator from "@/components/paginator";
 //Metadata
 export async function generateMetadata({
   params,
@@ -30,11 +31,16 @@ export async function generateMetadata({
 }
 export default async function ProductPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ page?: string }>;
 }) {
   //Obtener id del producto desde los parámetros
   const { id } = await params;
+  //Obtener parámetros de búsqueda
+  const { page } = (await searchParams) ?? {};
+  const numberPage = page ? parseInt(page) : 1;
   //Obtener nombre de usuario
   const session = await auth();
   const username =
@@ -43,6 +49,8 @@ export default async function ProductPage({
   const product = await getProductById(getProductIdFromURL(id));
   const products = await getProductsLimited(5);
   if (product === null || products === null) notFound();
+  //calificaciones
+  const reviews = await getReviewsByProductId(id);
   //Calcular capacidad
   const capacity =
     product.disk_capacity > 999
@@ -244,7 +252,19 @@ export default async function ProductPage({
           ))}
         </div>
       </section>
-      <CommentSection product_id={product.id} session={username} />
+      <CommentSection
+        product_id={product.id}
+        session={username}
+        reviewsData={reviews?.data ?? null}
+      />
+      {/*Paginación de comentarios*/}
+      {reviews && (
+        <Paginator
+          size={4}
+          totalPages={reviews.pages}
+          currentPage={numberPage}
+        />
+      )}
     </main>
   );
 }

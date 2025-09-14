@@ -12,7 +12,7 @@ export const getCartByUserId = async (userId: string): Promise<Cart | null> => {
   }
 };
 //Actualizar carrito
-export const putCart = async (data: Cart): Promise<number> => {
+export const updateCart = async (data: Cart): Promise<number> => {
   try {
     const res = await http.put(`/carts/${data.id}`, {
       user_id: data.user_id,
@@ -25,7 +25,7 @@ export const putCart = async (data: Cart): Promise<number> => {
   }
 };
 //Crear carrito
-export const postCart = async (
+export const createCart = async (
   userId: string,
   products: CartItem[]
 ): Promise<number> => {
