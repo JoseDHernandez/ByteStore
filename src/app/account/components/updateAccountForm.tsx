@@ -1,86 +1,121 @@
 "use client";
-import { UserUpdate } from "@/types/user";
-import { updateAccount } from "@/actions/updateAccount";
-import { useActionState } from "react";
 
-type Errors = {
-  name?: string[];
-  email?: string[];
-  physical_address?: string[];
-  id?: string[];
+import { useState } from "react";
+import type { UserDataItem } from "@/types/user";
+import { updateAccountSchema } from "@/schemas/usersSchemas";
+import { useAlerts } from "@/context/altersContext";
+import { updateUser } from "@/services/users";
+
+type Props = {
+  initData?: UserDataItem;
 };
 
-const initialState: { errors: Errors; success?: undefined } = {
-  errors: {},
-  success: undefined,
-};
+export default function UserAccountForm({ initData }: Props) {
+  const { addAlert } = useAlerts();
+  const [formData, setFormData] = useState<Omit<UserDataItem, "id" | "role">>({
+    name: initData?.name ?? "",
+    email: initData?.email ?? "",
+    physical_address: initData?.physical_address ?? "",
+  });
 
-interface Props {
-  userData: UserUpdate;
-}
+  const update = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-export default function UpdateAccountForm({ userData }: Props) {
-  const [state, formAction, pending] = useActionState(
-    updateAccount,
-    initialState
-  );
+    const validation = updateAccountSchema.safeParse(formData);
+    if (!validation.success || !initData) {
+      addAlert("Datos de actualización inválidos", "warning");
+      return;
+    }
+
+    try {
+      const res = await updateUser(initData.id, formData);
+      if (res === 200) {
+        addAlert("Cuenta actualizada", "success");
+      } else {
+        addAlert("Cuenta no actualizada", "warning");
+      }
+    } catch (error) {
+      console.error(error);
+      addAlert("Error en el servidor", "error");
+    }
+  };
 
   return (
-    <>
-      {state.success !== undefined && (
-        <p aria-live="polite">
-          {state.success
-            ? "Perfil actualizado"
-            : "Error actualizando el perfil"}
-        </p>
-      )}
-
-      <form action={formAction} className="space-y-4">
-        <input type="hidden" name="id" defaultValue={userData.id} required />
-
+    <form className="space-y-4" onSubmit={update}>
+      {/* Nombre */}
+      <div>
+        <label
+          htmlFor="name"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Nombre completo
+        </label>
         <input
-          type="text"
+          id="name"
           name="name"
-          defaultValue={userData.name ?? ""}
-          placeholder="Nombre"
-          className="border-dark-gray border-1 p-2 w-full rounded"
-          required
-        />
-        {Array.isArray(state?.errors?.name) && (
-          <p aria-live="polite">{state.errors.name.join(", ")}</p>
-        )}
-
-        <input
-          type="email"
-          name="email"
-          defaultValue={userData.email ?? ""}
-          placeholder="Correo"
-          className="border-dark-gray border-1 p-2 w-full rounded"
-          required
-        />
-        {Array.isArray(state?.errors?.email) && (
-          <p aria-live="polite">{state.errors.email.join(", ")}</p>
-        )}
-
-        <input
           type="text"
-          name="physical_address"
-          defaultValue={userData.physical_address ?? ""}
-          placeholder="Dirección"
-          className="border-dark-gray border-1 p-2 w-full rounded"
           required
+          minLength={6}
+          maxLength={100}
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          className="w-full border rounded-md p-2 focus:ring focus:ring-blue-200"
         />
-        {Array.isArray(state?.errors?.physical_address) && (
-          <p aria-live="polite">{state.errors.physical_address.join(", ")}</p>
-        )}
+      </div>
 
+      {/* Email */}
+      <div>
+        <label
+          htmlFor="email"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Email
+        </label>
         <input
-          type="submit"
-          className="bg-green text-white p-2 rounded-md"
-          value="Guardar cambios"
-          disabled={pending}
+          id="email"
+          name="email"
+          type="email"
+          required
+          minLength={5}
+          maxLength={300}
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          className="w-full border rounded-md p-2 focus:ring focus:ring-blue-200"
         />
-      </form>
-    </>
+      </div>
+
+      {/* Dirección */}
+      <div>
+        <label
+          htmlFor="physical_address"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Dirección
+        </label>
+        <input
+          id="physical_address"
+          name="physical_address"
+          type="text"
+          required
+          minLength={2}
+          maxLength={100}
+          value={formData.physical_address}
+          onChange={(e) =>
+            setFormData({ ...formData, physical_address: e.target.value })
+          }
+          className="w-full border rounded-md p-2 focus:ring focus:ring-blue-200"
+        />
+      </div>
+
+      {/* Botón */}
+      <div className="flex justify-end">
+        <button
+          type="submit"
+          className="bg-dark-blue text-white px-4 py-2 rounded-md hover:scale-105 transition"
+        >
+          Guardar cambios
+        </button>
+      </div>
+    </form>
   );
 }

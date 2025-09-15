@@ -1,6 +1,6 @@
 "use server";
 import { updateUser } from "@/services/users";
-import { updateAccountSchema } from "@/types/zodSchemas";
+import { updateAccountSchema } from "@/schemas/usersSchemas";
 import { UserUpdate } from "@/types/user";
 export const updateAccount = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -9,7 +9,6 @@ export const updateAccount = async (
 ) => {
   "use server";
   const rawFormData: UserUpdate = {
-    id: (formData.get("id") as string) ?? "",
     name: (formData.get("name") as string) ?? "",
     email: (formData.get("email") as string) ?? "",
     physical_address: (formData.get("physical_address") as string) ?? "",

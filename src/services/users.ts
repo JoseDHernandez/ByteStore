@@ -4,10 +4,12 @@ import {
   User,
   UserUpdate,
   UserChangePassword,
+  UserData,
+  UserDataItem,
 } from "@/types/user";
 import { api } from "./http";
 //Obtener usuario
-export const getUserById = async (id: string): Promise<UserUpdate | null> => {
+export const getUserById = async (id: string): Promise<UserDataItem | null> => {
   try {
     const res = await api.get(`/users/${id}`);
     return res.data.data;
@@ -17,12 +19,15 @@ export const getUserById = async (id: string): Promise<UserUpdate | null> => {
   }
 };
 //Actualizar usuario
-export const updateUser = async (user: UserUpdate): Promise<number> => {
+export const updateUser = async (
+  id: string,
+  user: UserUpdate
+): Promise<number> => {
   try {
-    const res = await api.put(`/users/${user.id}`, { user });
+    const res = await api.put(`/users/${id}`, user);
     return res.status;
   } catch (error) {
-    console.error(`Error al actualizar el usuario ${user.id}`, error);
+    console.error(`Error al actualizar el usuario ${id}`, error);
     return 400;
   }
 };
@@ -66,6 +71,58 @@ export const changePassword = async (
     return res.status;
   } catch (error) {
     console.error(`Error al cambiar contraseña`, error);
+    return 400;
+  }
+};
+//obtener usuarios paginados
+interface GetUsersPaginated {
+  numberPage?: number;
+  limit?: number;
+  query?: string;
+}
+export const getUsersPaginated = async ({
+  numberPage,
+  limit,
+  query,
+}: GetUsersPaginated): Promise<UserData | null> => {
+  const params: Record<string, string | number> = {};
+  if (numberPage) {
+    params["page"] = numberPage;
+  }
+  if (limit) {
+    params["limit"] = limit >= 10 && limit <= 100 ? limit : 10;
+  } else {
+    params["limit"] = 11;
+  }
+  if (query) {
+    params["search"] = query.trim();
+  }
+  try {
+    const res = await api.get(`/users/`, { params });
+    return res.data;
+  } catch (error) {
+    console.error(`Error al obtener usuarios`, error);
+    return null;
+  }
+};
+//eliminar
+export const deleteUser = async (id: string): Promise<number> => {
+  try {
+    const res = await api.delete(`/users/${id}`);
+    return res.status;
+  } catch (error) {
+    console.error(`Error al eliminar el usuario ${id}`, error);
+    return 400;
+  }
+};
+//cambiar rol
+export const changeRole = async (id: string, role: string): Promise<number> => {
+  try {
+    console.log(role);
+    const res = await api.patch(`/users/${id}/role`, { role: role });
+    return res.status;
+  } catch (error) {
+    console.error(`Error al cambiar el rol del usuario ${id}`, error);
     return 400;
   }
 };

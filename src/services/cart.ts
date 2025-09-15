@@ -1,10 +1,10 @@
 "use server";
 import { Cart, CartItem } from "@/types/cart";
-import { http } from "./http";
+import { api } from "./http";
 //Obtener carrito por usuario
 export const getCartByUserId = async (userId: string): Promise<Cart | null> => {
   try {
-    const res = await http.get(`/carts?user_id=${userId}`);
+    const res = await api.get(`/carts?user_id=${userId}`);
     return res.data[0];
   } catch (error) {
     console.error(`Error al obtener el carro del usuario: ${userId}`, error);
@@ -14,7 +14,7 @@ export const getCartByUserId = async (userId: string): Promise<Cart | null> => {
 //Actualizar carrito
 export const updateCart = async (data: Cart): Promise<number> => {
   try {
-    const res = await http.put(`/carts/${data.id}`, {
+    const res = await api.put(`/carts/${data.id}`, {
       user_id: data.user_id,
       products: data.products,
     });
@@ -30,7 +30,7 @@ export const createCart = async (
   products: CartItem[]
 ): Promise<number> => {
   try {
-    const res = await http.post(`/carts`, {
+    const res = await api.post(`/carts`, {
       user_id: userId,
       products: products,
     });
@@ -43,7 +43,7 @@ export const createCart = async (
 //Eliminar carrito
 export const deleteCartById = async (id: string): Promise<number> => {
   try {
-    const res = await http.delete(`/carts/${id}`);
+    const res = await api.delete(`/carts/${id}`);
     return res.status;
   } catch (error) {
     console.error(`Error al eliminar el carro con la id: ${id}`, error);

@@ -35,7 +35,7 @@ export const createDisplay = async (display: Display): Promise<number> => {
 };
 //actualizar
 export const updateDisplay = async (
-  id: number,
+  id: string,
   display: Display
 ): Promise<number> => {
   try {
@@ -47,7 +47,7 @@ export const updateDisplay = async (
   }
 };
 //eliminar
-export const deleteDisplay = async (id: number): Promise<number> => {
+export const deleteDisplay = async (id: string): Promise<number> => {
   try {
     const res = await api.delete(`/products/displays/${id}`);
     return res.status;

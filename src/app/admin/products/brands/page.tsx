@@ -145,20 +145,20 @@ export default function ProductsBrandsPage() {
             {/* Botones de acción */}
             <div className="flex gap-2">
               <button
-                onClick={() => openModal(brand)}
-                className="p-2 rounded-md hover:scale-105 transition duration-300 ease-in-out hover:bg-green hover:text-white"
-                title="Editar marca"
-                aria-label={`Editar: ${brand.name}`}
-              >
-                <BiPencil size={23} />
-              </button>
-              <button
                 onClick={() => openDeleteModal(brand)}
                 className="p-2 rounded-md hover:scale-105 transition duration-300 ease-in-out hover:bg-red-600 hover:text-white"
                 title="Eliminar marca"
                 aria-label={`Eliminar: ${brand.name}`}
               >
                 <BiTrashAlt size={23} />
+              </button>
+              <button
+                onClick={() => openModal(brand)}
+                className="p-2 rounded-md hover:scale-105 transition duration-300 ease-in-out hover:bg-green hover:text-white"
+                title="Editar marca"
+                aria-label={`Editar: ${brand.name}`}
+              >
+                <BiPencil size={23} />
               </button>
             </div>
           </div>

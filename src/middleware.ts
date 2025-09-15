@@ -10,7 +10,7 @@ const productDetailPattern = /^\/products\/[^/]+$/;
 export default auth((req) => {
   const { nextUrl, auth: session } = req;
   const isLoggedIn = !!session?.user;
-  const userRole = session?.user?.role ?? 0;
+  const userRole: string = session?.user?.role ?? "";
 
   const pathname = nextUrl.pathname;
   //Validar rutas publicas
@@ -24,7 +24,7 @@ export default auth((req) => {
     if (!isLoggedIn) {
       return NextResponse.redirect(new URL("/login", nextUrl.origin));
     }
-    if (userRole !== "ADMINISTRADOR") {
+    if (userRole.toUpperCase() !== "ADMINISTRADOR") {
       return NextResponse.redirect(new URL("/", nextUrl.origin));
     }
     return NextResponse.next();

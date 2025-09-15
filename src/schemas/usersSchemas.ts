@@ -56,7 +56,6 @@ export const registerSchema = z.object({
 });
 //Formulario de actualizar cuenta
 export const updateAccountSchema = z.object({
-  id: z.uuidv7(),
   name: z
     .string()
     .trim()
