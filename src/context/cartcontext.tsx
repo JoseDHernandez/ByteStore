@@ -60,6 +60,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       if (!isLoggedIn) return;
       try {
         const res = await getCartByUserId(userId);
+        console.log("syncCart", res?.id);
         //Validar si esta vació
         if (res == null) return;
         setId(res.id);
@@ -111,6 +112,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const createCartToServer = async (cartData: CartItem[]) => {
     if (cart.length < 1 && !id) return;
     const res = await createCart(userId, cartData);
+    console.log("creado", res);
     if (res !== 201) console.warn("Error al crear carrito");
   };
   //Eliminar
