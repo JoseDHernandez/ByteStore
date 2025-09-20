@@ -5,7 +5,7 @@ It is developed with Next.js and is **my first application using TypeScript**.
 
 You can also view the <a href="https://www.figma.com/proto/0l42nS28YZPT7Lt8Gltac9/Bk?node-id=0-1&t=NgoZJeCzcoMZQjc6-1" target="_blank">wireframe and mockup on Figma</a>.
 
-## You need the API to run this project. You can find it here: [Byte Store API](https://github.com/JoseDHernandez/ByteStore-API/tree/main) (documentation in Spanish).
+You need the API to run this project. You can find it here: [Byte Store API](https://github.com/JoseDHernandez/ByteStore-API/tree/main) (documentation in Spanish).
 
 ## Features
 
