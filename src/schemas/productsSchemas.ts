@@ -35,7 +35,7 @@ export const productUpdateSchema = z.object({
     .string()
     .min(10)
     .max(1000)
-    .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\.\,\'\"\(\)\-\!\¡]+$/),
+    .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\.\,\'\"\(\)\-\!\¡\;\:]+$/),
   processor_id: z.int().positive(),
   system_id: z.int().positive(),
   display_id: z.int().positive(),
@@ -66,7 +66,7 @@ export const productRegisterSchema = z.object({
     .string()
     .min(10)
     .max(1000)
-    .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\.\,\'\"\(\)\-\!\¡]+$/),
+    .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\.\,\'\"\(\)\-\!\¡\;\:]+$/),
   display: displaySchema,
 
   processor: processorSchema,

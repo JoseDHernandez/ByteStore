@@ -22,7 +22,7 @@ export const processorSchema = z.object({
   cores: z.number().int().gte(4).lte(64),
   speed: z
     .string()
-    .min(1)
+    .min(3)
     .max(200)
     .regex(/^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\.\,\-\)\(\\\/]+$/),
 });
